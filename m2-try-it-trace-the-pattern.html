@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trace the Pattern Backward | Try It | Leadership TransformED</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #444444;
+    --ink: #2b2726;
+    --red: #e3181d;
+    --crimson: #a8121a;
+    --coral: #ff6486;
+    --warm: #f7f5f4;
+    --line: #e4dfdc;
+    --gray: #8a8482;
+    --white: #ffffff;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Manrope", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--white);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 22px 40px; }
+
+  /* Header */
+  .top {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  }
+  .mark { flex: none; width: 44px; height: 30px; }
+  .top-text { flex: 1; min-width: 0; }
+  .step-name { font-size: 14px; font-weight: 600; color: var(--gray); margin: 0; }
+  .activity-title { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.01em; color: var(--charcoal); line-height: 1.25; }
+  .saved { font-size: 13px; color: var(--gray); white-space: nowrap; min-height: 1em; }
+
+  /* Progress trail */
+  .trail { display: flex; gap: 6px; margin: 20px 0 6px; padding: 0; list-style: none; }
+  .trail li { flex: 1; }
+  .trail button {
+    width: 100%; border: 0; cursor: pointer; font: inherit;
+    font-size: 13px; font-weight: 700; padding: 9px 6px 9px 14px;
+    background: var(--warm); color: var(--gray);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
+    transition: background .2s, color .2s;
+  }
+  .trail li:first-child button { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); padding-left: 10px; border-radius: 8px 0 0 8px; }
+  .trail button.done { background: #d9d4d1; color: var(--charcoal); }
+  .trail button[aria-current="step"] { background: var(--red); color: var(--white); }
+  .trail button:focus-visible { outline: 3px solid var(--charcoal); outline-offset: 2px; }
+  .trail .short { display: none; }
+  @media (max-width: 560px) {
+    .trail .long { display: none; }
+    .trail .short { display: inline; }
+  }
+
+  /* Panels */
+  .panel { display: none; padding-top: 18px; }
+  .panel.active { display: block; }
+  .panel h2 {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2;
+    margin: 6px 0 4px; color: var(--charcoal);
+  }
+  .panel h2:focus { outline: none; }
+  .timing { font-size: 14px; font-weight: 600; color: var(--red); margin: 0 0 14px; }
+  .panel p { margin: 0 0 14px; max-width: 64ch; }
+  h3 { font-size: 18px; font-weight: 800; margin: 26px 0 8px; color: var(--charcoal); }
+
+  .intro-lead { font-size: 19px; line-height: 1.55; color: var(--charcoal); }
+  .lens-preview { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 18px; padding: 0; list-style: none; }
+  .lens-preview li {
+    background: var(--warm); border-radius: 999px; padding: 7px 16px;
+    font-weight: 700; font-size: 15px; color: var(--charcoal);
+  }
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--warm); border-radius: var(--radius-md); padding: 14px 16px;
+    font-size: 15px; margin: 8px 0 22px;
+  }
+  .privacy svg { flex: none; margin-top: 3px; }
+
+  .guide { color: var(--charcoal); }
+  .examples { background: var(--warm); border-radius: var(--radius-md); padding: 14px 18px; margin: 0 0 18px; }
+  .examples summary { cursor: pointer; font-weight: 700; color: var(--charcoal); }
+  .examples summary:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+  .examples ul { margin: 10px 0 2px; padding-left: 20px; }
+  .examples li { margin-bottom: 4px; }
+
+  label.field-label, .legend {
+    display: block; font-weight: 700; margin: 0 0 6px; color: var(--charcoal); font-size: 16px;
+  }
+  .hint { font-size: 14px; color: var(--gray); margin: -2px 0 8px; }
+  textarea {
+    width: 100%; min-height: 96px; resize: vertical;
+    font: inherit; font-size: 16px; line-height: 1.5; color: var(--ink);
+    border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    padding: 12px 14px; background: var(--white);
+    transition: border-color .15s;
+  }
+  textarea:hover { border-color: #cfc8c4; }
+  textarea:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(227,24,29,.15); }
+  .field { margin-bottom: 20px; }
+
+  /* Lenses */
+  .lens {
+    position: relative; border: 1.5px solid var(--line); border-radius: var(--radius-lg);
+    padding: 20px 20px 6px 20px; margin: 0 0 16px;
+  }
+  .lens-head { display: flex; gap: 12px; align-items: baseline; }
+  .lens-num {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--charcoal); color: var(--white); font-weight: 800; font-size: 15px;
+    display: inline-flex; align-items: center; justify-content: center; transform: translateY(4px);
+  }
+  .lens h3 { margin: 0 0 8px; }
+  .lens > p { margin-bottom: 8px; }
+  .lens ul { margin: 0 0 14px; padding-left: 20px; color: var(--charcoal); font-size: 16px; }
+  .lens ul li { margin-bottom: 3px; }
+
+  /* Checkbox groups */
+  fieldset { border: 0; padding: 0; margin: 0 0 20px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chip span {
+    display: inline-block; padding: 8px 15px; border-radius: 999px;
+    border: 1.5px solid var(--line); font-size: 15px; font-weight: 600; cursor: pointer;
+    color: var(--charcoal); background: var(--white); transition: all .15s;
+  }
+  .chip input:checked + span { background: var(--charcoal); border-color: var(--charcoal); color: var(--white); }
+  .chip input:focus-visible + span { outline: 3px solid var(--red); outline-offset: 2px; }
+
+  /* Reframe (the payoff) */
+  .reframe { margin: 8px 0 26px; }
+  .reframe-usual {
+    background: var(--warm); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 18px 22px; color: var(--gray);
+  }
+  .reframe-usual .rl { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
+  .reframe-usual .rt { font-size: 17px; margin: 0; white-space: pre-wrap; }
+  .reframe-new {
+    position: relative; background: var(--white); border: 2px solid var(--charcoal); border-top: 0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 20px 22px 20px 26px; overflow: hidden;
+  }
+  .reframe-new::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--red); }
+  .reframe-new .rl { font-size: 15px; font-weight: 800; color: var(--red); margin: 0 0 4px; }
+  .reframe-new .rt { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.45; white-space: pre-wrap; }
+  .reframe .empty { font-style: italic; font-weight: 500; font-size: 16px; color: var(--gray); }
+  .recap { margin: 0 0 22px; padding: 0; list-style: none; }
+  .recap li { border-top: 1px solid var(--line); padding: 12px 0; }
+  .recap .rl { font-size: 14px; font-weight: 700; color: var(--gray); margin: 0 0 2px; }
+  .recap .rt { margin: 0; white-space: pre-wrap; }
+
+  .pull {
+    font-size: 22px; font-weight: 800; line-height: 1.35; letter-spacing: -0.01em;
+    color: var(--charcoal); margin: 4px 0 18px; padding-left: 18px; border-left: 4px solid var(--coral);
+    max-width: 30ch;
+  }
+
+  /* Buttons */
+  .nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn {
+    font: inherit; font-weight: 700; font-size: 16px; cursor: pointer;
+    border-radius: 999px; padding: 12px 24px; border: 2px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .btn:focus-visible { outline: 3px solid var(--charcoal); outline-offset: 3px; }
+  .btn-primary { background: var(--red); color: var(--white); }
+  .btn-primary:hover { background: var(--crimson); }
+  .btn-secondary { background: var(--white); color: var(--charcoal); border-color: var(--line); }
+  .btn-secondary:hover { border-color: var(--charcoal); }
+  .btn-quiet { background: none; color: var(--gray); padding-left: 4px; padding-right: 4px; text-decoration: underline; text-underline-offset: 3px; }
+  .btn-quiet:hover { color: var(--red); }
+  .keep { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0 4px; }
+  .keep-note { font-size: 14px; color: var(--gray); margin: 8px 0 0; }
+
+  .sources { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--gray); }
+  .sources strong { color: var(--charcoal); }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  #printout { display: none; }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .wrap { padding: 20px 16px 32px; }
+    .activity-title { font-size: 19px; }
+    .panel h2 { font-size: 22px; }
+    .saved { display: none; }
+    .lens { padding: 16px 16px 4px; }
+    .reframe-new .rt { font-size: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+  @media print {
+    .wrap > *:not(#printout) { display: none !important; }
+    #printout { display: block; font-size: 12pt; }
+    #printout h1 { font-size: 18pt; margin: 0 0 4pt; }
+    #printout .pmeta { color: #666; margin: 0 0 16pt; }
+    #printout h2 { font-size: 12pt; margin: 14pt 0 3pt; }
+    #printout p { margin: 0; white-space: pre-wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <svg class="mark" viewBox="0 0 44 30" aria-hidden="true" focusable="false">
+      <path d="M2 3 L13 15 L2 27" fill="none" stroke="#d9d4d1" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 3 L26 15 L15 27" fill="none" stroke="#444444" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28 3 L39 15 L28 27" fill="none" stroke="#e3181d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="top-text">
+      <p class="step-name">Try It, 10 minutes</p>
+      <p class="activity-title">Trace the Pattern Backward</p>
+    </div>
+    <div class="saved" id="saved" aria-live="polite"></div>
+  </header>
+
+  <nav aria-label="Activity progress">
+    <ol class="trail" id="trail">
+      <li><button type="button" data-go="0"><span class="long">Start</span><span class="short">Start</span></button></li>
+      <li><button type="button" data-go="1"><span class="long">Part 1</span><span class="short">1</span></button></li>
+      <li><button type="button" data-go="2"><span class="long">Part 2</span><span class="short">2</span></button></li>
+      <li><button type="button" data-go="3"><span class="long">Part 3</span><span class="short">3</span></button></li>
+      <li><button type="button" data-go="4"><span class="long">Move on</span><span class="short">End</span></button></li>
+    </ol>
+  </nav>
+
+  <!-- START -->
+  <section class="panel active" data-panel="0" aria-labelledby="h0">
+    <h2 id="h0" tabindex="-1">About this activity</h2>
+    <p class="intro-lead">You have examined historical context through policy, place, and the experiences of educators and communities. Now shift from studying history to investigating the system you lead.</p>
+    <p>This activity asks you to trace one real pattern backward. The goal is not to prove exactly where the pattern came from. The goal is to challenge explanations your organization may have accepted too quickly.</p>
+
+    <h3>What you’ll do</h3>
+    <p>Return to the pattern you identified at the beginning of the Read section. Work through three lenses:</p>
+    <ul class="lens-preview">
+      <li>Policy and Structure</li>
+      <li>Place and Access</li>
+      <li>People and Knowledge</li>
+    </ul>
+
+    <div class="privacy">
+      <svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true" focusable="false"><rect x="2" y="8.5" width="14" height="10" rx="2.5" fill="none" stroke="#444" stroke-width="1.8"/><path d="M5 8.5V6a4 4 0 0 1 8 0v2.5" fill="none" stroke="#444" stroke-width="1.8"/></svg>
+      <div>This is private reflection. Nothing is submitted. Your notes are kept only in this browser on this device, so you can leave and come back. On a shared computer, use <strong>Clear my notes</strong> at the end.</div>
+    </div>
+
+    <div class="nav"><span></span><button type="button" class="btn btn-primary" data-next>Begin Part 1</button></div>
+  </section>
+
+  <!-- PART 1 -->
+  <section class="panel" data-panel="1" aria-labelledby="h1">
+    <h2 id="h1" tabindex="-1">Part 1: Name the pattern</h2>
+    <p class="timing">About 2 minutes</p>
+    <p class="guide">Write the pattern as specifically as you can. Name what is happening, for whom, and where. Avoid broad labels such as “achievement gaps” or “family engagement is low.”</p>
+
+    <details class="examples">
+      <summary>See examples</summary>
+      <ul>
+        <li>Students from some groups are underrepresented in advanced coursework.</li>
+        <li>Discipline referrals are concentrated among particular student groups.</li>
+        <li>Some schools consistently attract and retain more experienced staff.</li>
+        <li>Families from some communities participate less often in formal decision-making spaces.</li>
+      </ul>
+    </details>
+
+    <div class="field">
+      <label class="field-label" for="pattern">The pattern</label>
+      <p class="hint" id="pattern-hint">What is happening, for whom, and where.</p>
+      <textarea id="pattern" data-key="pattern" aria-describedby="pattern-hint"></textarea>
+    </div>
+    <div class="field">
+      <label class="field-label" for="usual">We usually explain this pattern by saying…</label>
+      <textarea id="usual" data-key="usual"></textarea>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-secondary" data-prev>Back</button>
+      <button type="button" class="btn btn-primary" data-next>Continue to Part 2</button>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section class="panel" data-panel="2" aria-labelledby="h2">
+    <h2 id="h2" tabindex="-1">Part 2: Look through three lenses</h2>
+    <p class="timing">About 5 minutes</p>
+
+    <div class="lens">
+      <div class="lens-head"><span class="lens-num" aria-hidden="true">1</span><h3 id="l1">Policy and Structure</h3></div>
+      <p>What rule, criterion, boundary, prerequisite, schedule, process, or long-standing practice helps shape this pattern today?</p>
+      <ul>
+        <li>Who gains access most easily under the current structure?</li>
+        <li>Who has to navigate more barriers?</li>
+        <li>Which parts of the process feel normal mainly because they have been in place for a long time?</li>
+      </ul>
+      <div class="field">
+        <label class="sr-only" for="policy">Your notes: Policy and Structure</label>
+        <textarea id="policy" data-key="policy" placeholder="Your notes"></textarea>
+      </div>
+    </div>
+
+    <div class="lens">
+      <div class="lens-head"><span class="lens-num" aria-hidden="true">2</span><h3 id="l2">Place and Access</h3></div>
+      <p>How might geography, transportation, feeder patterns, program location, housing patterns, or resource distribution affect who experiences this opportunity or outcome?</p>
+      <ul>
+        <li>Where is the opportunity physically located?</li>
+        <li>Who can reach it easily?</li>
+        <li>What does a student or family need in order to take advantage of it?</li>
+      </ul>
+      <div class="field">
+        <label class="sr-only" for="place">Your notes: Place and Access</label>
+        <textarea id="place" data-key="place" placeholder="Your notes"></textarea>
+      </div>
+    </div>
+
+    <div class="lens">
+      <div class="lens-head"><span class="lens-num" aria-hidden="true">3</span><h3 id="l3">People and Knowledge</h3></div>
+      <p>Whose experience, expertise, history, or perspective shapes how your organization understands this pattern?</p>
+      <ul>
+        <li>Whose explanation is treated as credible?</li>
+        <li>Who is usually consulted when the problem is discussed?</li>
+        <li>Whose knowledge might be missing?</li>
+      </ul>
+      <div class="field">
+        <label class="sr-only" for="people">Your notes: People and Knowledge</label>
+        <textarea id="people" data-key="people" placeholder="Your notes"></textarea>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-secondary" data-prev>Back</button>
+      <button type="button" class="btn btn-primary" data-next>Continue to Part 3</button>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section class="panel" data-panel="3" aria-labelledby="h3">
+    <h2 id="h3" tabindex="-1">Part 3: Reframe the leadership problem</h2>
+    <p class="timing">About 3 minutes</p>
+
+    <div class="field">
+      <label class="field-label" for="usual2">We usually explain this pattern as…</label>
+      <p class="hint" id="usual2-hint">Carried over from Part 1. Sharpen it if you like.</p>
+      <textarea id="usual2" data-key="usual2" aria-describedby="usual2-hint"></textarea>
+    </div>
+    <div class="field">
+      <label class="field-label" for="whatif">What if this pattern is also shaped by…</label>
+      <p class="hint" id="whatif-hint">Include at least one factor you had not been fully considering before this module.</p>
+      <textarea id="whatif" data-key="whatif" aria-describedby="whatif-hint"></textarea>
+    </div>
+
+    <fieldset>
+      <legend class="legend">The factor I named is…</legend>
+      <div class="chips" data-group="factor">
+        <label class="chip"><input type="checkbox" value="Structural"><span>Structural</span></label>
+        <label class="chip"><input type="checkbox" value="Historical"><span>Historical</span></label>
+        <label class="chip"><input type="checkbox" value="Geographic"><span>Geographic</span></label>
+        <label class="chip"><input type="checkbox" value="Knowledge-based"><span>Knowledge-based</span></label>
+      </div>
+    </fieldset>
+
+    <h3>One piece of evidence</h3>
+    <p>Identify one piece of evidence you would want before making a leadership decision about the pattern.</p>
+    <fieldset>
+      <legend class="legend">It might be…</legend>
+      <div class="chips" data-group="evidence">
+        <label class="chip"><input type="checkbox" value="Disaggregated data"><span>Disaggregated data</span></label>
+        <label class="chip"><input type="checkbox" value="History of a policy or process"><span>History of a policy or process</span></label>
+        <label class="chip"><input type="checkbox" value="Student or family perspectives"><span>Student or family perspectives</span></label>
+        <label class="chip"><input type="checkbox" value="Staff or community knowledge"><span>Staff or community knowledge</span></label>
+        <label class="chip"><input type="checkbox" value="Who has been included in past decisions"><span>Who has been included in past decisions</span></label>
+      </div>
+    </fieldset>
+    <div class="field">
+      <label class="field-label" for="evidence">The evidence I would want</label>
+      <textarea id="evidence" data-key="evidence"></textarea>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn btn-secondary" data-prev>Back</button>
+      <button type="button" class="btn btn-primary" data-next>Continue</button>
+    </div>
+  </section>
+
+  <!-- MOVE ON -->
+  <section class="panel" data-panel="4" aria-labelledby="h4">
+    <h2 id="h4" tabindex="-1">Before you move on</h2>
+    <p class="pull">The goal is to change the question before you change the practice.</p>
+
+    <div class="reframe" aria-label="Your reframed question">
+      <div class="reframe-usual">
+        <p class="rl">We usually explain this pattern as…</p>
+        <p class="rt" id="out-usual"></p>
+      </div>
+      <div class="reframe-new">
+        <p class="rl">What if this pattern is also shaped by…</p>
+        <p class="rt" id="out-whatif"></p>
+      </div>
+    </div>
+
+    <ul class="recap">
+      <li><p class="rl">The pattern</p><p class="rt" id="out-pattern"></p></li>
+      <li><p class="rl">Evidence I would want</p><p class="rt" id="out-evidence"></p></li>
+    </ul>
+
+    <div class="field">
+      <label class="field-label" for="decision">If our usual explanation is incomplete, what decision might we make differently?</label>
+      <p class="hint" id="decision-hint">Carry this question into Apply It.</p>
+      <textarea id="decision" data-key="decision" aria-describedby="decision-hint"></textarea>
+    </div>
+
+    <h3>Keep your notes</h3>
+    <div class="keep">
+      <button type="button" class="btn btn-secondary" id="print">Print or save as PDF</button>
+      <button type="button" class="btn btn-secondary" id="download">Download as a text file</button>
+      <button type="button" class="btn btn-quiet" id="clear">Clear my notes</button>
+    </div>
+    <p class="keep-note" id="keep-note" aria-live="polite"></p>
+
+    <div class="nav">
+      <button type="button" class="btn btn-secondary" data-prev>Back</button>
+      <span></span>
+    </div>
+  </section>
+
+  <p class="sources"><strong>Sources.</strong> This activity draws on the Read, Watch, and Listen resources used earlier in this module.</p>
+
+  <div id="printout" aria-hidden="true"></div>
+</div>
+
+<script>
+(function () {
+  var STORE_KEY = "lt-m2-tryit-trace-pattern-v1";
+  var panels = Array.prototype.slice.call(document.querySelectorAll(".panel"));
+  var trailBtns = Array.prototype.slice.call(document.querySelectorAll("#trail button"));
+  var fields = Array.prototype.slice.call(document.querySelectorAll("textarea[data-key]"));
+  var groups = Array.prototype.slice.call(document.querySelectorAll("[data-group]"));
+  var savedEl = document.getElementById("saved");
+  var state = { step: 0, visited: 0, text: {}, checks: {} };
+
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(STORE_KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && typeof s === "object") {
+          state.step = +s.step || 0;
+          state.visited = +s.visited || 0;
+          state.text = s.text || {};
+          state.checks = s.checks || {};
+        }
+      }
+    } catch (e) { /* storage unavailable: work without saving */ }
+  }
+  var saveTimer = null;
+  function save() {
+    try {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      savedEl.textContent = "Saved on this device";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () { savedEl.textContent = ""; }, 2500);
+    } catch (e) { savedEl.textContent = ""; }
+  }
+
+  function fillForm() {
+    fields.forEach(function (f) { f.value = state.text[f.dataset.key] || ""; });
+    groups.forEach(function (g) {
+      var chosen = state.checks[g.dataset.group] || [];
+      g.querySelectorAll("input").forEach(function (i) { i.checked = chosen.indexOf(i.value) !== -1; });
+    });
+  }
+
+  function val(k) { return (state.text[k] || "").trim(); }
+  function setOut(id, text, emptyMsg) {
+    var el = document.getElementById(id);
+    el.textContent = "";
+    if (text) { el.textContent = text; }
+    else { var s = document.createElement("span"); s.className = "empty"; s.textContent = emptyMsg; el.appendChild(s); }
+  }
+
+  function renderSummary() {
+    var evidenceBits = (state.checks.evidence || []).join(", ");
+    var ev = val("evidence");
+    var evidenceText = [evidenceBits, ev].filter(Boolean).join(ev && evidenceBits ? ": " : "");
+    var factors = (state.checks.factor || []).join(", ");
+    var whatif = val("whatif");
+    setOut("out-usual", val("usual2") || val("usual"), "Not written yet. Go back to Part 3 to add it.");
+    setOut("out-whatif", whatif ? whatif + (factors ? "\n(" + factors + ")" : "") : "", "Not written yet. Go back to Part 3 to add it.");
+    setOut("out-pattern", val("pattern"), "Not written yet. Go back to Part 1 to add it.");
+    setOut("out-evidence", evidenceText, "Not chosen yet. Go back to Part 3 to add it.");
+  }
+
+  function go(n, focus) {
+    n = Math.max(0, Math.min(panels.length - 1, n));
+    // Carry the Part 1 explanation into Part 3 the first time it is reached.
+    if (n === 3 && !val("usual2") && val("usual")) {
+      state.text.usual2 = state.text.usual;
+      document.getElementById("usual2").value = state.text.usual2;
+    }
+    if (n === 4) renderSummary();
+    state.step = n;
+    state.visited = Math.max(state.visited, n);
+    panels.forEach(function (p, i) { p.classList.toggle("active", i === n); });
+    trailBtns.forEach(function (b, i) {
+      if (i === n) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+      b.classList.toggle("done", i < n || (i <= state.visited && i !== n));
+    });
+    save();
+    if (focus) {
+      var h = panels[n].querySelector("h2");
+      if (h) h.focus();
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function buildNotes() {
+    var lines = [];
+    function add(label, text) { lines.push({ label: label, text: text || "(blank)" }); }
+    add("The pattern", val("pattern"));
+    add("We usually explain this pattern by saying…", val("usual"));
+    add("Lens 1: Policy and Structure", val("policy"));
+    add("Lens 2: Place and Access", val("place"));
+    add("Lens 3: People and Knowledge", val("people"));
+    add("We usually explain this pattern as…", val("usual2"));
+    add("What if this pattern is also shaped by…", val("whatif"));
+    add("The factor I named is", (state.checks.factor || []).join(", "));
+    add("Kind of evidence", (state.checks.evidence || []).join(", "));
+    add("The evidence I would want", val("evidence"));
+    add("If our usual explanation is incomplete, what decision might we make differently?", val("decision"));
+    return lines;
+  }
+  function dateString() {
+    try { return new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); }
+    catch (e) { return ""; }
+  }
+
+  // Events
+  fields.forEach(function (f) {
+    f.addEventListener("input", function () { state.text[f.dataset.key] = f.value; save(); });
+  });
+  groups.forEach(function (g) {
+    g.addEventListener("change", function () {
+      state.checks[g.dataset.group] = Array.prototype.slice.call(g.querySelectorAll("input:checked")).map(function (i) { return i.value; });
+      save();
+    });
+  });
+  document.querySelectorAll("[data-next]").forEach(function (b) { b.addEventListener("click", function () { go(state.step + 1, true); }); });
+  document.querySelectorAll("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(state.step - 1, true); }); });
+  trailBtns.forEach(function (b) { b.addEventListener("click", function () { go(+b.dataset.go, true); }); });
+
+  document.getElementById("print").addEventListener("click", function () {
+    var out = document.getElementById("printout");
+    out.textContent = "";
+    var h = document.createElement("h1"); h.textContent = "Trace the Pattern Backward"; out.appendChild(h);
+    var m = document.createElement("p"); m.className = "pmeta"; m.textContent = "Try It, Leadership TransformED. " + dateString(); out.appendChild(m);
+    buildNotes().forEach(function (n) {
+      var h2 = document.createElement("h2"); h2.textContent = n.label; out.appendChild(h2);
+      var p = document.createElement("p"); p.textContent = n.text; out.appendChild(p);
+    });
+    try { window.print(); }
+    catch (e) { document.getElementById("keep-note").textContent = "Printing is blocked here. Use Download as a text file instead."; }
+  });
+
+  document.getElementById("download").addEventListener("click", function () {
+    var text = "Trace the Pattern Backward\nTry It, Leadership TransformED\n" + dateString() + "\n\n";
+    buildNotes().forEach(function (n) { text += n.label + "\n" + n.text + "\n\n"; });
+    try {
+      var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "trace-the-pattern-notes.txt";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      document.getElementById("keep-note").textContent = "Downloaded trace-the-pattern-notes.txt.";
+    } catch (e) {
+      document.getElementById("keep-note").textContent = "Downloading is blocked here. Use Print or save as PDF instead.";
+    }
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    if (!window.confirm("Clear all your notes from this device? This cannot be undone.")) return;
+    state = { step: 0, visited: 0, text: {}, checks: {} };
+    try { window.localStorage.removeItem(STORE_KEY); } catch (e) {}
+    fillForm();
+    go(0, true);
+    savedEl.textContent = "Notes cleared";
+  });
+
+  load();
+  fillForm();
+  go(state.step, false);
+})();
+</script>
+</body>
+</html>
