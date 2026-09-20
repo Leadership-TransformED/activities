@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Leadership Decision: Advanced Math Placement | Apply It | Leadership TransformED</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #444444;
+    --ink: #2b2726;
+    --red: #e3181d;
+    --crimson: #a8121a;
+    --coral: #ff6486;
+    --warm: #f7f5f4;
+    --line: #e4dfdc;
+    --gray: #8a8482;
+    --white: #ffffff;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Manrope", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink); background: var(--white);
+    font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 22px 40px; }
+
+  .top { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .mark { flex: none; width: 44px; height: 30px; }
+  .top-text { flex: 1; min-width: 0; }
+  .step-name { font-size: 14px; font-weight: 600; color: var(--gray); margin: 0; }
+  .activity-title { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.01em; color: var(--charcoal); line-height: 1.25; }
+
+  .trail { display: flex; gap: 6px; margin: 20px 0 6px; padding: 0; list-style: none; }
+  .trail li { flex: 1; }
+  .trail button {
+    width: 100%; border: 0; cursor: pointer; font: inherit;
+    font-size: 13px; font-weight: 700; padding: 9px 6px 9px 14px;
+    background: var(--warm); color: var(--gray);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);
+  }
+  .trail li:first-child button { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); padding-left: 10px; border-radius: 8px 0 0 8px; }
+  .trail button.done { background: #d9d4d1; color: var(--charcoal); }
+  .trail button[aria-current="step"] { background: var(--red); color: var(--white); }
+  .trail button:focus-visible { outline: 3px solid var(--charcoal); outline-offset: 2px; }
+  .trail .long { display: inline; } .trail .short { display: none; }
+  @media (max-width: 620px) { .trail .long { display: none; } .trail .short { display: inline; } }
+
+  .panel { display: none; padding-top: 18px; }
+  .panel.active { display: block; }
+  h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; margin: 6px 0 12px; color: var(--charcoal); }
+  h2:focus { outline: none; }
+  h3 { font-size: 18px; font-weight: 800; margin: 26px 0 8px; color: var(--charcoal); }
+  p { margin: 0 0 14px; max-width: 66ch; }
+  .lead { font-size: 19px; line-height: 1.55; color: var(--charcoal); }
+
+  .situation { background: var(--warm); border-radius: var(--radius-lg); padding: 20px 22px 6px; margin: 0 0 20px; }
+  .situation h3 { margin-top: 0; }
+  .voices { list-style: none; margin: 0 0 16px; padding: 0; }
+  .voices li { border-left: 3px solid var(--coral); padding: 2px 0 2px 14px; margin-bottom: 10px; font-style: italic; color: var(--charcoal); }
+
+  .privacy { display: flex; gap: 12px; align-items: flex-start; background: var(--warm); border-radius: var(--radius-md); padding: 14px 16px; font-size: 15px; margin: 8px 0 22px; }
+  .privacy svg { flex: none; margin-top: 3px; }
+
+  .qbox { border-left: 4px solid var(--charcoal); padding: 2px 0 2px 16px; margin: 0 0 20px; }
+  .qbox .ql { font-size: 14px; font-weight: 700; color: var(--gray); margin: 0 0 2px; }
+  .qbox .qt { font-size: 18px; font-weight: 700; color: var(--charcoal); margin: 0; line-height: 1.4; }
+
+  .choices { list-style: none; margin: 0 0 8px; padding: 0; }
+  .choices li { margin-bottom: 10px; }
+  .choice {
+    display: flex; gap: 12px; width: 100%; text-align: left; font: inherit; font-size: 16.5px;
+    background: var(--white); border: 1.5px solid var(--line); border-radius: var(--radius-md);
+    padding: 14px 16px; cursor: pointer; color: var(--ink); line-height: 1.5;
+  }
+  .choice:hover { border-color: var(--charcoal); }
+  .choice:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+  .choice .letter { flex: none; font-weight: 800; color: var(--charcoal); }
+  .choice[aria-pressed="true"] { border-color: var(--charcoal); border-width: 2.5px; background: var(--warm); }
+  .choice[aria-pressed="true"] .letter::after { content: " — your choice"; font-weight: 700; color: var(--red); }
+
+  .feedback { border: 2px solid var(--charcoal); border-radius: var(--radius-lg); padding: 20px 22px 6px; margin: 18px 0 0; }
+  .feedback h3 { margin-top: 0; font-size: 17px; }
+  .feedback h3:first-of-type { margin-top: 0; }
+  .fb-lens { display: inline-block; background: var(--charcoal); color: var(--white); border-radius: 999px; padding: 5px 14px; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+  .fb-block { margin-bottom: 14px; }
+  .fb-label { font-size: 14px; font-weight: 800; color: var(--red); margin: 0 0 2px; }
+  .fb-text { margin: 0; }
+  .others { background: var(--warm); border-radius: var(--radius-md); padding: 14px 18px; margin: 4px 0 18px; }
+  .others summary { cursor: pointer; font-weight: 700; color: var(--charcoal); }
+  .others summary:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+  .others .o { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+  .others .o p { margin: 0 0 6px; font-size: 16px; }
+  .others .ol { font-weight: 800; color: var(--charcoal); }
+
+  .recap { list-style: none; margin: 0 0 22px; padding: 0; }
+  .recap li { border-top: 1px solid var(--line); padding: 14px 0; }
+  .recap .rl { font-size: 14px; font-weight: 700; color: var(--gray); margin: 0 0 2px; }
+  .recap .rt { margin: 0 0 6px; font-weight: 700; color: var(--ink); }
+  .recap .rc { margin: 0; font-size: 16px; color: var(--charcoal); }
+  .recap .none { font-style: italic; color: var(--gray); font-weight: 500; }
+
+  .pull { font-size: 21px; font-weight: 800; line-height: 1.4; letter-spacing: -0.01em; color: var(--charcoal); margin: 4px 0 20px; padding-left: 18px; border-left: 4px solid var(--coral); max-width: 34ch; }
+  .prompt { border: 1.5px solid var(--line); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 12px; }
+  .prompt p { margin: 0; font-size: 18px; font-weight: 700; color: var(--charcoal); }
+
+  .nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn { font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; border-radius: 999px; padding: 12px 24px; border: 2px solid transparent; }
+  .btn:focus-visible { outline: 3px solid var(--charcoal); outline-offset: 3px; }
+  .btn-primary { background: var(--red); color: var(--white); }
+  .btn-primary:hover { background: var(--crimson); }
+  .btn-secondary { background: var(--white); color: var(--charcoal); border-color: var(--line); }
+  .btn-secondary:hover { border-color: var(--charcoal); }
+  .btn-quiet { background: none; color: var(--gray); padding-left: 4px; padding-right: 4px; text-decoration: underline; text-underline-offset: 3px; }
+  .btn-quiet:hover { color: var(--red); }
+  .btn[hidden] { display: none; }
+  .keep { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0 4px; }
+  .keep-note { font-size: 14px; color: var(--gray); margin: 8px 0 0; }
+
+  .textalt { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .textalt summary { cursor: pointer; font-weight: 700; color: var(--charcoal); }
+  .textalt summary:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+  .textalt .body { font-size: 16px; }
+  .textalt h3 { font-size: 17px; }
+  .textalt h4 { font-size: 15px; margin: 12px 0 2px; color: var(--charcoal); }
+  .textalt p { margin: 0 0 8px; }
+
+  .sources { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--gray); }
+  .sources strong { color: var(--charcoal); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  #printout { display: none; }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .wrap { padding: 20px 16px 32px; }
+    .activity-title { font-size: 19px; }
+    h2 { font-size: 22px; }
+    .situation, .feedback { padding: 16px 16px 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media print {
+    .wrap > *:not(#printout) { display: none !important; }
+    #printout { display: block; font-size: 12pt; }
+    #printout h1 { font-size: 18pt; margin: 0 0 4pt; }
+    #printout .pmeta { color: #666; margin: 0 0 16pt; }
+    #printout h2 { font-size: 12pt; margin: 14pt 0 3pt; }
+    #printout p { margin: 0 0 6pt; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <svg class="mark" viewBox="0 0 44 30" aria-hidden="true" focusable="false">
+      <path d="M2 3 L13 15 L2 27" fill="none" stroke="#d9d4d1" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 3 L26 15 L15 27" fill="none" stroke="#444444" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28 3 L39 15 L28 27" fill="none" stroke="#e3181d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="top-text">
+      <p class="step-name">Apply It, 10 minutes</p>
+      <p class="activity-title">A Leadership Decision: Advanced Math Placement</p>
+    </div>
+  </header>
+
+  <nav aria-label="Activity progress">
+    <ol class="trail" id="trail">
+      <li><button type="button" data-go="0"><span class="long">Situation</span><span class="short">Start</span></button></li>
+      <li><button type="button" data-go="1"><span class="long">Decision 1</span><span class="short">1</span></button></li>
+      <li><button type="button" data-go="2"><span class="long">Decision 2</span><span class="short">2</span></button></li>
+      <li><button type="button" data-go="3"><span class="long">Decision 3</span><span class="short">3</span></button></li>
+      <li><button type="button" data-go="4"><span class="long">Decision 4</span><span class="short">4</span></button></li>
+      <li><button type="button" data-go="5"><span class="long">Reflection</span><span class="short">End</span></button></li>
+    </ol>
+  </nav>
+
+  <noscript>
+    <p style="border:2px solid #e3181d;border-radius:14px;padding:16px;margin-top:18px;">
+      This activity needs JavaScript to run. The full text version, including every choice and all feedback,
+      is not available without it. Ask your facilitator for the text version of this case.
+    </p>
+  </noscript>
+
+  <!-- START -->
+  <section class="panel active" data-panel="0" aria-labelledby="h0">
+    <h2 id="h0" tabindex="-1">About this application</h2>
+    <p class="lead">Try It asked you to reframe a real pattern from your own context. Apply It asks you to practice making a leadership decision when the evidence is incomplete and the first explanation is not enough.</p>
+    <p>There is no score. The purpose is to make your assumptions, evidence choices, and tradeoffs visible.</p>
+
+    <div class="situation">
+      <h3>The leadership situation</h3>
+      <p>You are a district leader reviewing participation in advanced middle school mathematics.</p>
+      <p>The district serves a diverse student population, but enrollment in advanced math does not reflect that diversity. Some student groups are consistently underrepresented.</p>
+      <p>The current process uses standardized test scores, prior grades, teacher recommendations, and family opt-in. Advanced courses are offered at every middle school, but transportation, scheduling, and staffing differ by building.</p>
+      <p>At a leadership meeting, several explanations surface quickly:</p>
+      <ul class="voices">
+        <li>“Some students simply are not ready for the pace.”</li>
+        <li>“Families have to choose the opportunity.”</li>
+        <li>“Teachers know which students can handle the course.”</li>
+        <li>“We use the same criteria for everyone.”</li>
+      </ul>
+      <p>The superintendent wants a recommendation before the next cabinet meeting.</p>
+    </div>
+
+    <h3>What you’ll do</h3>
+    <p>Work through four decisions. At each one, choose the response closest to what you would do as the leader. You’ll see what that decision centers, what it risks overlooking, and which lens from the module it draws on. You can look at what the other responses would have done before moving on.</p>
+
+    <div class="privacy">
+      <svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true" focusable="false"><rect x="2" y="8.5" width="14" height="10" rx="2.5" fill="none" stroke="#444" stroke-width="1.8"/><path d="M5 8.5V6a4 4 0 0 1 8 0v2.5" fill="none" stroke="#444" stroke-width="1.8"/></svg>
+      <div>Nothing is submitted, and the activity never asks for your name, your district, or any student information. Your four selections are kept only in this browser so you can leave and come back. On a shared computer, use <strong>Clear my responses</strong> at the end.</div>
+    </div>
+
+    <div class="nav"><span></span><button type="button" class="btn btn-primary" data-next>Begin Decision 1</button></div>
+  </section>
+
+  <!-- DECISIONS 1-4 are built here -->
+  <div id="decisions"></div>
+
+  <!-- REFLECTION -->
+  <section class="panel" data-panel="5" aria-labelledby="h5">
+    <h2 id="h5" tabindex="-1">Leadership reflection</h2>
+
+    <h3>The decisions you made</h3>
+    <ul class="recap" id="recap"></ul>
+
+    <h3>Return to your own context</h3>
+    <p>Return to the real pattern you traced in Try It. Complete each of these for yourself.</p>
+    <div class="prompt"><p>The explanation I need to question more carefully is…</p></div>
+    <div class="prompt"><p>Before I make a decision, I need to hear from or examine…</p></div>
+
+    <p class="pull">What would change in my leadership if I treated history, structure, access, and lived experience as evidence rather than background information?</p>
+
+    <h3>Keep your decisions</h3>
+    <div class="keep">
+      <button type="button" class="btn btn-secondary" id="print">Print or save as PDF</button>
+      <button type="button" class="btn btn-quiet" id="clear">Clear my responses</button>
+    </div>
+    <p class="keep-note" id="keep-note" aria-live="polite"></p>
+
+    <div class="nav">
+      <button type="button" class="btn btn-secondary" data-prev>Back</button>
+      <span></span>
+    </div>
+  </section>
+
+  <details class="textalt">
+    <summary>Text version of this activity</summary>
+    <div class="body" id="textalt"></div>
+  </details>
+
+  <p class="sources"><strong>Sources.</strong> This case applies the concepts and resources used throughout this module.</p>
+
+  <div id="printout" aria-hidden="true"></div>
+</div>
+
+<script>
+(function () {
+  var STORE_KEY = "lt-m2-applyit-advanced-math-v1";
+
+  var DECISIONS = [
+    {
+      title: "Decision 1: What do you do first?",
+      scenario: ["The superintendent asks, “Why are some groups underrepresented?”"],
+      question: "What explanation are you refusing to accept without evidence?",
+      options: [
+        {
+          letter: "A",
+          text: "Ask principals to identify students who appear ready but have not enrolled.",
+          lens: "People and Knowledge",
+          centers: "Moving quickly, and trusting the professional judgment already in the building.",
+          overlooks: "“Appears ready” is a judgment made by the same process that produced the pattern. Adding students one at a time leaves the process that sorted them untouched.",
+          opens: "You may find students who should already be enrolled. Ask who gets noticed under the current system, and who does not."
+        },
+        {
+          letter: "B",
+          text: "Review disaggregated enrollment and qualification data by school, race, language status, disability status, and other locally relevant groups before accepting any explanation.",
+          lens: "Policy and Structure",
+          centers: "Evidence over explanation. It declines all four of the quick answers in the meeting until there is something to test them against.",
+          overlooks: "Data will show where the pattern lives, not why it exists. Numbers alone can point back at students unless you also examine the process that produced them.",
+          opens: "Disaggregating by school as well as by group can show whether this is one districtwide pattern or several different building-level ones."
+        },
+        {
+          letter: "C",
+          text: "Survey families to learn why they are not choosing advanced math.",
+          lens: "People and Knowledge",
+          centers: "Family voice, and a willingness to ask rather than assume.",
+          overlooks: "Starting here accepts one of the explanations from the meeting — that the cause is family choice — before checking whether students ever reached the point of choosing.",
+          opens: "The same survey asked later, after you know where in the process the pattern begins, tends to produce far more useful answers."
+        },
+        {
+          letter: "D",
+          text: "Keep the current process for now because the criteria are applied consistently to all students.",
+          lens: "Policy and Structure",
+          centers: "Consistency, and the fairness of treating every student the same way.",
+          overlooks: "Identical criteria produce different results when access to what the criteria measure is not identical. Sameness of process is not sameness of opportunity.",
+          opens: "Worth asking what each criterion actually measures, and what a student needs in order to do well on it."
+        }
+      ]
+    },
+    {
+      title: "Decision 2: The data complicate the story",
+      scenario: [
+        "Your review shows that underrepresentation begins before students formally opt in. Students from some groups are less likely to receive teacher recommendations even when prior grades and assessment results are similar.",
+        "One school also requires families to attend an evening information session before placement is finalized.",
+        "What do you examine next?"
+      ],
+      question: "Where does human judgment enter a process your organization describes as objective?",
+      options: [
+        {
+          letter: "A",
+          text: "Teacher recommendation criteria and how consistently they are interpreted across schools.",
+          lens: "People and Knowledge",
+          centers: "The point where judgment enters a process the district describes as objective — and where your own data show the gap opening.",
+          overlooks: "This is about criteria and conditions, not about individual teachers. Framed as blame, it will close the conversation. It also leaves the evening session unexamined.",
+          opens: "If recommendation criteria are unwritten, that itself is a finding. Compare what different schools understand the criteria to mean."
+        },
+        {
+          letter: "B",
+          text: "Whether families understand the benefits of advanced coursework.",
+          lens: "People and Knowledge",
+          centers: "Information and communication, which districts can act on quickly.",
+          overlooks: "Your evidence already shows the gap opening before families choose. Understanding is not what is stopping a student who was never recommended.",
+          opens: "Keep this one. It becomes the right question once the earlier gate is addressed."
+        },
+        {
+          letter: "C",
+          text: "Whether students from underrepresented groups are motivated enough to take on more challenging work.",
+          lens: "People and Knowledge",
+          centers: "Student effort as the explanation.",
+          overlooks: "The evidence in front of you contradicts it: these students had similar grades and assessment results. Choosing this relocates the cause in students when the data point at the process.",
+          opens: "Notice how quickly this explanation arrives, and what it protects from examination."
+        },
+        {
+          letter: "D",
+          text: "Whether the district should raise the test-score cutoff so the process feels more objective.",
+          lens: "Policy and Structure",
+          centers: "The appearance of objectivity, and removing argument from placement.",
+          overlooks: "A higher single threshold narrows access rather than widening it, and test access and preparation are themselves unevenly distributed. It answers a question about judgment by changing a number.",
+          opens: "Ask what a cutoff predicts, how well it predicts it, and for whom it predicts least well."
+        }
+      ]
+    },
+    {
+      title: "Decision 3: Whose knowledge counts?",
+      scenario: [
+        "You convene a small review team. The first group suggested includes central-office leaders, principals, counselors, and advanced-course teachers.",
+        "A colleague asks whether students, families, multilingual staff, or community members should be included."
+      ],
+      question: "Who currently has the authority to define what this problem is?",
+      options: [
+        {
+          letter: "A",
+          text: "Keep the group small and professional so the work stays efficient.",
+          lens: "People and Knowledge",
+          centers: "Speed, and the expertise of people who run the system daily.",
+          overlooks: "This group has already offered its explanations — they were the four heard at the meeting. A group that shares a vantage point will tend to confirm it.",
+          opens: "If the group stays as it is, name explicitly whose experience is absent, and what you will do about that gap."
+        },
+        {
+          letter: "B",
+          text: "Add students and families after the leadership team has developed a draft recommendation.",
+          lens: "People and Knowledge",
+          centers: "Structure and sequence, with a concrete proposal for people to react to.",
+          overlooks: "By the time a draft exists, the problem has been defined. Their knowledge becomes feedback on someone else's framing rather than evidence that shapes it.",
+          opens: "If the sequence is fixed, be honest with participants about what is still open to change and what is not."
+        },
+        {
+          letter: "C",
+          text: "Include people who experience the placement process directly before a recommendation is developed, and treat their knowledge as evidence rather than feedback on a nearly finished plan.",
+          lens: "People and Knowledge",
+          centers: "Changing who has the authority to define the problem, not only who comments on the solution.",
+          overlooks: "It costs time, needs real facilitation, and only works if you are genuinely willing to change the frame. Done as a formality, it damages trust more than not asking at all.",
+          opens: "People who navigate a process can often name barriers that never appear in the data — like what an evening session requires of a family."
+        },
+        {
+          letter: "D",
+          text: "Ask principals to represent the perspectives of students and families.",
+          lens: "People and Knowledge",
+          centers: "Convenience, and existing relationships between schools and their communities.",
+          overlooks: "Representation is not the same as the source. Principals can report what they hear, which is filtered by who talks to them and what families feel able to say.",
+          opens: "Ask principals what they hear, and treat it as a starting point for who to talk with directly."
+        }
+      ]
+    },
+    {
+      title: "Decision 4: The recommendation",
+      scenario: [
+        "You now know the district has an underrepresentation pattern, inconsistent use of teacher recommendations, and participation barriers tied to the placement process.",
+        "The cabinet meeting is next week."
+      ],
+      question: "What would it look like to act with enough evidence to learn, without pretending you already know the entire answer?",
+      options: [
+        {
+          letter: "A",
+          text: "Launch a family awareness campaign encouraging more students to enroll.",
+          lens: "People and Knowledge",
+          centers: "Demand, and something visible the district can do immediately.",
+          overlooks: "It asks families to work harder at a process you now know is uneven. The recommendation gap and the evening session requirement stay exactly as they are.",
+          opens: "Communication matters, but as a companion to changing the process rather than a substitute for it."
+        },
+        {
+          letter: "B",
+          text: "Remove teacher recommendations immediately and use a single test-score threshold for every student.",
+          lens: "Policy and Structure",
+          centers: "Decisive action on the gate where your evidence shows the gap opening.",
+          overlooks: "It swaps one narrow gate for another. Test preparation and test-taking conditions are unevenly distributed too, and removing teacher knowledge entirely discards information a single score cannot carry.",
+          opens: "Multiple pathways in — any one of several indicators qualifying a student — usually widen access more than replacing one sole criterion with another."
+        },
+        {
+          letter: "C",
+          text: "Recommend a time-limited review and pilot that broadens how students are identified, removes avoidable access barriers, includes student and family perspectives, and tracks who gains access before deciding what should become districtwide policy.",
+          lens: "Policy and Structure, Place and Access, People and Knowledge",
+          centers: "Acting and learning at the same time, with a deliberate check on who the change actually reaches.",
+          overlooks: "Pilots stall. Without a named owner, a decision date, and a stated measure of who gains access, this becomes a way to look busy while the pattern continues.",
+          opens: "Say in the recommendation what evidence would make you expand it, change it, or stop it."
+        },
+        {
+          letter: "D",
+          text: "Leave the current system in place until the district has enough longitudinal data to prove exactly why the disparity exists.",
+          lens: "Policy and Structure",
+          centers: "Certainty, and not acting on an incomplete picture.",
+          overlooks: "Waiting is itself a decision. Each year the current process runs, another cohort moves through it. Proof of exact cause is a standard the district does not apply to its other decisions.",
+          opens: "Ask what level of evidence the district requires before acting in other areas, and whether this one is being held to a different standard."
+        }
+      ]
+    }
+  ];
+
+  var state = { step: 0, visited: 0, choices: {} };
+  var panelHost = document.getElementById("decisions");
+
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(STORE_KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && typeof s === "object") {
+          state.step = +s.step || 0;
+          state.visited = +s.visited || 0;
+          state.choices = s.choices || {};
+        }
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+  function save() {
+    try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  // Build the four decision panels
+  DECISIONS.forEach(function (d, di) {
+    var idx = di + 1;
+    var sec = el("section", "panel");
+    sec.dataset.panel = String(idx);
+    sec.setAttribute("aria-labelledby", "dh" + idx);
+
+    var h = el("h2", null, d.title);
+    h.id = "dh" + idx;
+    h.tabIndex = -1;
+    sec.appendChild(h);
+
+    d.scenario.forEach(function (t) { sec.appendChild(el("p", null, t)); });
+
+    var q = el("div", "qbox");
+    q.appendChild(el("p", "ql", "Leadership question"));
+    q.appendChild(el("p", "qt", d.question));
+    sec.appendChild(q);
+
+    var list = el("ul", "choices");
+    d.options.forEach(function (o) {
+      var li = document.createElement("li");
+      var b = el("button", "choice");
+      b.type = "button";
+      b.setAttribute("aria-pressed", "false");
+      b.dataset.letter = o.letter;
+      b.dataset.decision = String(idx);
+      var sp = el("span", "letter", o.letter);
+      b.appendChild(sp);
+      b.appendChild(el("span", null, o.text));
+      li.appendChild(b);
+      list.appendChild(li);
+    });
+    sec.appendChild(list);
+
+    var fbWrap = el("div");
+    fbWrap.id = "fb" + idx;
+    fbWrap.setAttribute("aria-live", "polite");
+    sec.appendChild(fbWrap);
+
+    var nav = el("div", "nav");
+    var back = el("button", "btn btn-secondary", "Back");
+    back.type = "button"; back.setAttribute("data-prev", "");
+    var next = el("button", "btn btn-primary", idx === 4 ? "Continue to the reflection" : "Continue to Decision " + (idx + 1));
+    next.type = "button"; next.setAttribute("data-next", ""); next.id = "next" + idx; next.hidden = true;
+    nav.appendChild(back); nav.appendChild(next);
+    sec.appendChild(nav);
+
+    panelHost.appendChild(sec);
+  });
+
+  var panels = Array.prototype.slice.call(document.querySelectorAll(".panel"));
+  var trailBtns = Array.prototype.slice.call(document.querySelectorAll("#trail button"));
+
+  function optionOf(di, letter) {
+    var opts = DECISIONS[di - 1].options;
+    for (var i = 0; i < opts.length; i++) { if (opts[i].letter === letter) return opts[i]; }
+    return null;
+  }
+
+  function renderFeedback(di) {
+    var host = document.getElementById("fb" + di);
+    host.textContent = "";
+    var letter = state.choices[di];
+    var next = document.getElementById("next" + di);
+    if (!letter) { next.hidden = true; return; }
+    var o = optionOf(di, letter);
+
+    var fb = el("div", "feedback");
+    fb.appendChild(el("h3", null, "Your choice: " + o.letter));
+    fb.appendChild(el("span", "fb-lens", "Lens: " + o.lens));
+    [["What this centers", o.centers], ["What it risks overlooking", o.overlooks], ["What it makes possible", o.opens]].forEach(function (pair) {
+      var b = el("div", "fb-block");
+      b.appendChild(el("p", "fb-label", pair[0]));
+      b.appendChild(el("p", "fb-text", pair[1]));
+      fb.appendChild(b);
+    });
+    host.appendChild(fb);
+
+    var det = el("details", "others");
+    det.appendChild(el("summary", null, "Compare the other responses"));
+    DECISIONS[di - 1].options.forEach(function (x) {
+      if (x.letter === letter) return;
+      var w = el("div", "o");
+      var p1 = el("p");
+      p1.appendChild(el("span", "ol", x.letter + ". "));
+      p1.appendChild(document.createTextNode(x.text));
+      w.appendChild(p1);
+      w.appendChild(el("p", null, "Centers: " + x.centers));
+      w.appendChild(el("p", null, "Risks overlooking: " + x.overlooks));
+      det.appendChild(w);
+    });
+    host.appendChild(det);
+
+    next.hidden = false;
+  }
+
+  function renderRecap() {
+    var ul = document.getElementById("recap");
+    ul.textContent = "";
+    DECISIONS.forEach(function (d, i) {
+      var di = i + 1;
+      var li = document.createElement("li");
+      li.appendChild(el("p", "rl", d.title));
+      var letter = state.choices[di];
+      if (letter) {
+        var o = optionOf(di, letter);
+        li.appendChild(el("p", "rt", o.letter + ". " + o.text));
+        li.appendChild(el("p", "rc", "Centers: " + o.centers));
+      } else {
+        li.appendChild(el("p", "rt none", "No response chosen yet."));
+      }
+      ul.appendChild(li);
+    });
+  }
+
+  function go(n, focus) {
+    n = Math.max(0, Math.min(panels.length - 1, n));
+    if (n === 5) renderRecap();
+    state.step = n;
+    state.visited = Math.max(state.visited, n);
+    panels.forEach(function (p, i) { p.classList.toggle("active", i === n); });
+    trailBtns.forEach(function (b, i) {
+      if (i === n) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+      b.classList.toggle("done", i !== n && i <= state.visited);
+    });
+    save();
+    if (focus) {
+      var h = panels[n].querySelector("h2");
+      if (h) h.focus();
+      window.scrollTo(0, 0);
+    }
+  }
+
+  // Choice buttons
+  document.querySelectorAll(".choice").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var di = +b.dataset.decision;
+      state.choices[di] = b.dataset.letter;
+      save();
+      panels[di].querySelectorAll(".choice").forEach(function (x) {
+        x.setAttribute("aria-pressed", x === b ? "true" : "false");
+      });
+      renderFeedback(di);
+      var fb = panels[di].querySelector(".feedback h3");
+      if (fb) { fb.tabIndex = -1; fb.focus(); }
+    });
+  });
+
+  document.querySelectorAll("[data-next]").forEach(function (b) { b.addEventListener("click", function () { go(state.step + 1, true); }); });
+  document.querySelectorAll("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { go(state.step - 1, true); }); });
+  trailBtns.forEach(function (b) { b.addEventListener("click", function () { go(+b.dataset.go, true); }); });
+
+  function dateString() {
+    try { return new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); }
+    catch (e) { return ""; }
+  }
+
+  document.getElementById("print").addEventListener("click", function () {
+    var out = document.getElementById("printout");
+    out.textContent = "";
+    out.appendChild(el("h1", null, "A Leadership Decision: Advanced Math Placement"));
+    out.appendChild(el("p", "pmeta", "Apply It, Leadership TransformED. " + dateString()));
+    DECISIONS.forEach(function (d, i) {
+      out.appendChild(el("h2", null, d.title));
+      var letter = state.choices[i + 1];
+      if (letter) {
+        var o = optionOf(i + 1, letter);
+        out.appendChild(el("p", null, "Your choice: " + o.letter + ". " + o.text));
+        out.appendChild(el("p", null, "Lens: " + o.lens));
+        out.appendChild(el("p", null, "What this centers: " + o.centers));
+        out.appendChild(el("p", null, "What it risks overlooking: " + o.overlooks));
+        out.appendChild(el("p", null, "What it makes possible: " + o.opens));
+      } else {
+        out.appendChild(el("p", null, "No response chosen."));
+      }
+    });
+    out.appendChild(el("h2", null, "Leadership reflection"));
+    out.appendChild(el("p", null, "The explanation I need to question more carefully is…"));
+    out.appendChild(el("p", null, "Before I make a decision, I need to hear from or examine…"));
+    out.appendChild(el("p", null, "What would change in my leadership if I treated history, structure, access, and lived experience as evidence rather than background information?"));
+    try { window.print(); }
+    catch (e) { document.getElementById("keep-note").textContent = "Printing is blocked here. Open this activity in its own browser tab to print it."; }
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    if (!window.confirm("Clear your responses from this device? This cannot be undone.")) return;
+    state = { step: 0, visited: 0, choices: {} };
+    try { window.localStorage.removeItem(STORE_KEY); } catch (e) {}
+    document.querySelectorAll(".choice").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+    [1, 2, 3, 4].forEach(function (di) { renderFeedback(di); });
+    go(0, true);
+  });
+
+  // Linear text alternative: every scenario, choice and piece of feedback in reading order
+  (function buildTextAlt() {
+    var host = document.getElementById("textalt");
+    var intro = el("p", null, "This is the complete text of the activity, including the feedback for every response. Nothing here is interactive.");
+    host.appendChild(intro);
+    DECISIONS.forEach(function (d) {
+      host.appendChild(el("h3", null, d.title));
+      d.scenario.forEach(function (t) { host.appendChild(el("p", null, t)); });
+      host.appendChild(el("p", null, "Leadership question: " + d.question));
+      d.options.forEach(function (o) {
+        host.appendChild(el("h4", null, "Response " + o.letter + ": " + o.text));
+        host.appendChild(el("p", null, "Lens: " + o.lens));
+        host.appendChild(el("p", null, "What this centers: " + o.centers));
+        host.appendChild(el("p", null, "What it risks overlooking: " + o.overlooks));
+        host.appendChild(el("p", null, "What it makes possible: " + o.opens));
+      });
+    });
+    host.appendChild(el("h3", null, "Leadership reflection"));
+    host.appendChild(el("p", null, "Return to the real pattern you traced in Try It."));
+    host.appendChild(el("p", null, "The explanation I need to question more carefully is…"));
+    host.appendChild(el("p", null, "Before I make a decision, I need to hear from or examine…"));
+    host.appendChild(el("p", null, "What would change in my leadership if I treated history, structure, access, and lived experience as evidence rather than background information?"));
+  })();
+
+  load();
+  document.querySelectorAll(".choice").forEach(function (b) {
+    if (state.choices[+b.dataset.decision] === b.dataset.letter) b.setAttribute("aria-pressed", "true");
+  });
+  [1, 2, 3, 4].forEach(function (di) { renderFeedback(di); });
+  go(state.step, false);
+})();
+</script>
+</body>
+</html>
