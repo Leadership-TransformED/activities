@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Different Story, Different Decision — CRIL Foundations, Module 1 Apply It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#444444;
+    --ink:#2a2a2a;
+    --red:#e3181d;
+    --coral:#ff6486;
+    --warm:#f7f5f4;
+    --line:#e2dedb;
+    --gray:#8d8783;
+    --white:#ffffff;
+    --radius:16px;
+    --radius-sm:10px;
+    --maxw:44rem;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--white);color:var(--ink);
+    font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:26px 20px 40px}
+  p,li{max-width:36em}
+
+  /* header */
+  .masthead{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+  .mark{flex:0 0 auto;margin-top:2px}
+  .eyebrow{font-size:.8125rem;font-weight:600;color:var(--gray);margin:0 0 2px}
+  h1{font-size:1.75rem;line-height:1.2;font-weight:800;color:var(--charcoal);margin:0 0 4px;letter-spacing:-.015em}
+  .minutes{font-size:.875rem;color:var(--gray);margin:0}
+
+  /* trail */
+  .trail{margin:0 0 20px}
+  .trail ol{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+  .trail li{flex:1 1 auto;min-width:0}
+  .chev{
+    display:flex;align-items:center;gap:7px;padding:9px 12px 9px 14px;
+    background:var(--warm);color:var(--gray);border:1px solid var(--line);
+    border-radius:var(--radius-sm);font-size:.8125rem;font-weight:600;
+    white-space:nowrap;width:100%;text-align:left;font-family:inherit;cursor:pointer;
+  }
+  .chev .num{
+    flex:0 0 auto;width:1.35rem;height:1.35rem;border-radius:50%;
+    display:grid;place-items:center;font-size:.75rem;font-weight:700;
+    background:var(--white);border:1px solid var(--line);color:var(--gray);
+  }
+  .chev .name{overflow:hidden;text-overflow:ellipsis}
+  li[data-state="done"] .chev{background:#ebe7e4;color:var(--charcoal);border-color:#d8d3cf}
+  li[data-state="done"] .chev .num{background:var(--charcoal);border-color:var(--charcoal);color:var(--white)}
+  li[data-state="current"] .chev{background:var(--red);border-color:var(--red);color:var(--white)}
+  li[data-state="current"] .chev .num{background:var(--white);border-color:var(--white);color:var(--red)}
+
+  /* view switch */
+  .viewswitch{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 24px;font-size:.875rem}
+  .viewswitch .label{color:var(--gray);font-weight:600}
+  .pillset{display:flex;gap:6px;background:var(--warm);border:1px solid var(--line);border-radius:999px;padding:4px}
+  .pill{font-family:inherit;font-size:.8125rem;font-weight:600;border:0;background:transparent;color:var(--charcoal);padding:6px 13px;border-radius:999px;cursor:pointer}
+  .pill[aria-pressed="true"]{background:var(--charcoal);color:var(--white)}
+
+  /* sections */
+  h2{font-size:1.3rem;line-height:1.25;font-weight:800;color:var(--charcoal);margin:0 0 10px;letter-spacing:-.01em}
+  h3{font-size:1.0625rem;font-weight:700;color:var(--charcoal);margin:26px 0 6px}
+  .lede{color:var(--charcoal)}
+  .scene{
+    background:var(--warm);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 4px;margin:18px 0;
+  }
+  .scene h3:first-child{margin-top:0}
+  .scene p{margin:0 0 14px}
+  .quote{
+    border-left:4px solid var(--coral);padding:2px 0 2px 14px;margin:0 0 14px;
+    font-size:1.0625rem;color:var(--charcoal);
+  }
+  .note{background:var(--warm);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:var(--radius-sm);padding:14px 16px;margin:20px 0}
+  .note p{margin:0;font-size:.9375rem}
+  .note p + p{margin-top:8px}
+
+  /* choices */
+  fieldset{border:0;margin:20px 0 0;padding:0}
+  legend{font-size:1rem;font-weight:700;color:var(--charcoal);padding:0;margin:0 0 4px}
+  .hint{font-size:.875rem;color:var(--gray);margin:0 0 12px}
+  .choice{display:block;margin:0 0 10px;position:relative}
+  .choice input{position:absolute;opacity:0;width:1px;height:1px}
+  .choice .box{
+    display:flex;gap:12px;align-items:flex-start;
+    border:1px solid #cfc9c5;border-radius:var(--radius-sm);
+    padding:14px 15px;background:var(--white);cursor:pointer;
+  }
+  .choice .letter{
+    flex:0 0 auto;width:1.7rem;height:1.7rem;border-radius:8px;
+    display:grid;place-items:center;font-size:.875rem;font-weight:800;
+    background:var(--warm);border:1px solid var(--line);color:var(--charcoal);
+  }
+  .choice .text{flex:1 1 auto;max-width:none}
+  .choice input:hover + .box,.choice .box:hover{border-color:var(--charcoal)}
+  .choice input:focus-visible + .box{outline:3px solid var(--red);outline-offset:2px}
+  .choice input:checked + .box{border-color:var(--red);border-width:2px;padding:13px 14px;background:#fff7f7}
+  .choice input:checked + .box .letter{background:var(--red);border-color:var(--red);color:var(--white)}
+  .choice .chosenmark{display:none;font-size:.75rem;font-weight:800;color:var(--red);margin-top:4px}
+  .choice input:checked + .box .chosenmark{display:block}
+
+  /* feedback */
+  .fb{margin:22px 0 0}
+  .fb[data-answered="false"]{display:none}
+  .fbitem{
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;margin:0 0 12px;background:var(--white);
+  }
+  .fbitem[data-chosen="true"]{border-color:#d8d3cf;background:var(--warm)}
+  .fbitem .head{font-size:.8125rem;font-weight:800;color:var(--charcoal);margin:0 0 10px}
+  .fbitem[data-chosen="true"] .head{color:var(--red)}
+  .fbitem dl{margin:0}
+  .fbitem dt{font-size:.75rem;font-weight:800;color:var(--gray);margin:12px 0 2px}
+  .fbitem dt:first-child{margin-top:0}
+  .fbitem dd{margin:0;font-size:.9375rem}
+  .focus{
+    border-top:1px solid var(--line);margin:18px 0 0;padding:16px 0 0;
+  }
+  .focus .k{font-size:.75rem;font-weight:800;color:var(--gray);margin:0 0 4px}
+  .focus p{margin:0 0 14px;font-size:.9375rem}
+  .lq{background:var(--warm);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin:4px 0 0}
+  .lq .k{font-size:.75rem;font-weight:800;color:var(--red);margin:0 0 4px}
+  .lq p{margin:0;font-weight:600;color:var(--charcoal)}
+
+  ul.plain{padding-left:1.15em;margin:10px 0}
+  ul.plain li{margin:0 0 8px}
+  .stems{margin:14px 0 0}
+  .stems li{margin:0 0 12px;font-weight:600;color:var(--charcoal)}
+  .recap{border:1px solid var(--line);border-radius:var(--radius);padding:4px 18px 18px;margin:18px 0}
+  .recap h4{font-size:.75rem;font-weight:800;color:var(--gray);margin:18px 0 2px}
+  .recap p{margin:0;font-size:.9375rem}
+  .recap .none{color:var(--gray);font-style:italic}
+  .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* nav + tools */
+  .stepnav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:30px 0 0;padding-top:20px;border-top:1px solid var(--line)}
+  .btn{font-family:inherit;font-size:.9375rem;font-weight:700;padding:11px 20px;border-radius:999px;cursor:pointer;border:1px solid var(--charcoal);background:var(--white);color:var(--charcoal)}
+  .btn.primary{background:var(--red);border-color:var(--red);color:var(--white)}
+  .btn.quiet{border-color:var(--line);color:var(--charcoal);font-weight:600}
+  .btn:disabled{opacity:.4;cursor:default}
+  .spacer{flex:1 1 auto}
+  .counter{font-size:.8125rem;color:var(--gray);font-weight:600}
+  .tools{margin:28px 0 0;padding:18px;background:var(--warm);border:1px solid var(--line);border-radius:var(--radius)}
+  .tools h3{margin:0 0 4px;font-size:1rem}
+  .tools p{font-size:.875rem;margin:0 0 14px;color:var(--charcoal)}
+  .toolrow{display:flex;flex-wrap:wrap;gap:8px}
+  .status{font-size:.8125rem;color:var(--charcoal);margin:12px 0 0;min-height:1.2em}
+  :is(button,a,summary,input,[tabindex]):focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+  footer.src{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);color:var(--gray);font-size:.875rem}
+  footer.src h3{font-size:.875rem;color:var(--gray);margin:0 0 6px}
+  footer.src p{margin:0 0 8px;max-width:40em}
+
+  /* modes */
+  body[data-view="steps"] section[data-stage]:not([data-active="true"]){display:none}
+  body[data-view="steps"] .fb:not([data-others="open"]) .fbitem[data-chosen="false"]{display:none}
+  body[data-view="linear"] .trail,
+  body[data-view="linear"] .stepnav,
+  body[data-view="linear"] .othersbtn{display:none}
+  body[data-view="linear"] .fb{display:block!important}
+  body[data-view="linear"] section[data-stage]{display:block;margin:0 0 26px;padding:0 0 10px;border-bottom:1px solid var(--line)}
+  body[data-view="linear"] section[data-stage="5"]{border-bottom:0}
+  body[data-view="linear"] .stagelabel{display:block}
+  .stagelabel{display:none;font-size:.75rem;font-weight:800;color:var(--red);margin:0 0 4px}
+
+  @media (max-width:560px){
+    body{font-size:16px}
+    .wrap{padding:20px 16px 34px}
+    h1{font-size:1.4rem}
+    .trail .name{display:none}
+    .chev{justify-content:center;padding:9px 6px}
+    li[data-state="current"] .chev{padding:9px 12px}
+    li[data-state="current"] .chev .name{display:inline}
+    .btn{width:100%;text-align:center}
+    .spacer{display:none}
+    .stepnav{flex-direction:column;align-items:stretch}
+    .counter{text-align:center}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+  @media print{
+    .trail,.viewswitch,.stepnav,.tools,.othersbtn{display:none}
+    section[data-stage]{display:block!important;page-break-inside:avoid}
+    .fb,.fbitem{display:block!important}
+    body{font-size:12pt}
+  }
+</style>
+</head>
+<body data-view="steps">
+<div class="wrap">
+
+  <header class="masthead">
+    <svg class="mark" width="42" height="42" viewBox="0 0 42 42" role="img" aria-label="Leadership TransformED chevron mark" focusable="false">
+      <path d="M4 7 L16 21 L4 35" fill="none" stroke="#d8d3cf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 7 L26 21 L14 35" fill="none" stroke="#444444" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 7 L36 21 L24 35" fill="none" stroke="#e3181d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <p class="eyebrow">CRIL Foundations, Module 1 — Apply It</p>
+      <h1>Different Story, Different Decision</h1>
+      <p class="minutes">About 10 minutes. Private to you.</p>
+    </div>
+  </header>
+
+  <nav class="trail" aria-label="Activity progress">
+    <ol id="trail">
+      <li data-state="current"><button type="button" class="chev" data-go="1"><span class="num" aria-hidden="true">1</span><span class="name">The situation</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="2"><span class="num" aria-hidden="true">2</span><span class="name">What do you know?</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="3"><span class="num" aria-hidden="true">3</span><span class="name">New information</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="4"><span class="num" aria-hidden="true">4</span><span class="name">The recommendation</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="5"><span class="num" aria-hidden="true">5</span><span class="name">Back to your own leadership</span></button></li>
+    </ol>
+  </nav>
+
+  <div class="viewswitch">
+    <span class="label" id="viewlabel">How you'd like to work:</span>
+    <div class="pillset" role="group" aria-labelledby="viewlabel">
+      <button type="button" class="pill" id="pill-steps" aria-pressed="true">One decision at a time</button>
+      <button type="button" class="pill" id="pill-linear" aria-pressed="false">Everything on one page</button>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ 1. SITUATION ============ -->
+    <section data-stage="1" data-active="true" aria-labelledby="h-1" tabindex="-1">
+      <p class="stagelabel">Part 1 of 5</p>
+      <h2 id="h-1">About this application</h2>
+      <p class="lede">Try It helped you map what you bring into leadership. Apply It asks you to notice what happens when those experiences and preferences meet an ambiguous leadership situation.</p>
+      <p>The purpose is not to find the correct interpretation. It is to practice separating observation from assumption before a judgment becomes a decision.</p>
+
+      <div class="scene">
+        <h3>The leadership situation</h3>
+        <p>You are part of a district team considering department chairs for a new cross-district leadership role.</p>
+        <p>Jordan is widely respected for strong technical knowledge and thoughtful written work. In leadership meetings, Jordan speaks infrequently, rarely jumps into fast-moving discussion, often sends detailed ideas afterward, and has declined several optional social events.</p>
+        <p class="quote">A colleague says, &ldquo;Jordan is strong technically, but I am not sure Jordan has the presence for district leadership.&rdquo;</p>
+      </div>
+
+      <h3>What you'll do</h3>
+      <p>Work through three decisions. Choose the response closest to what you would actually do. There is no score and no correct answer. After each choice you can read what all four responses assume, what evidence each uses, and what each leaves uncertain.</p>
+
+      <div class="note">
+        <p><strong>Nothing here is submitted.</strong> Your selections stay in this browser and are never sent anywhere or seen by a facilitator or your cohort. There is nothing to type — the reflection at the end is yours to think through or write in your own notes.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. DECISION 1 ============ -->
+    <section data-stage="2" aria-labelledby="h-2" tabindex="-1">
+      <p class="stagelabel">Part 2 of 5</p>
+      <h2 id="h-2">Decision 1: What do you know?</h2>
+      <p>All you have so far is the pattern of behavior in meetings and one colleague's concern.</p>
+
+      <fieldset>
+        <legend>Which statement is closest to your first response?</legend>
+        <p class="hint">Choose one.</p>
+
+        <label class="choice">
+          <input type="radio" name="d1" value="A" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Jordan probably needs to become more outspoken before taking on a district leadership role.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d1" value="B" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Jordan may not be interested in leadership if Jordan keeps declining opportunities to connect socially.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d1" value="C" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">I do not yet have enough evidence to translate Jordan's communication style into a judgment about leadership capacity.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d1" value="D" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">I would ask the colleague who raised the concern to decide, because that person has worked with Jordan longer.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+      </fieldset>
+
+      <div class="fb" data-fb="1" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — Jordan needs to become more outspoken</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Visible participation, treated as a skill Jordan is missing. It moves straight to development, which is a generous instinct.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The judgment has already been made. Speaking frequency has been converted into leadership capacity without anything establishing the link. It also treats being outspoken as a requirement, when so far it is only a description of how the current meetings run.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A coaching conversation — aimed at a target no one has yet shown the role needs.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — Jordan may not be interested</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Informal participation, read as a signal of motivation.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Optional events are optional. Attendance can track caregiving, distance, energy, culture, sobriety, or simple preference, none of which speak to interest in a role. And no one in the scenario has asked Jordan.</dd>
+            <dt>What it makes possible</dt>
+            <dd>This is the assumption easiest to test. One direct question settles it.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — not enough evidence yet</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Holding observation and interpretation apart, which is the move this decision is built to practice.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>That withholding judgment is a starting point, not an answer. Said once and left there, it can become a way to stay out of a decision you are part of. The team still needs a next step.</dd>
+            <dt>What it makes possible</dt>
+            <dd>The question that changes the conversation: what does this role actually require, and what have we actually seen?</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — defer to the colleague who knows Jordan longer</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Familiarity as expertise, and longer exposure as better evidence.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Length of contact is not accuracy. Deferring hands the standard to one person's read, and that read is the thing in question. It also removes your judgment from a decision you were asked into.</dd>
+            <dt>What it makes possible</dt>
+            <dd>The colleague's observations are worth having — as information to examine, not a verdict to adopt.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="1">See what the other responses assume</button>
+
+        <div class="focus">
+          <p class="k">Feedback focus</p>
+          <p>Separate observable behavior from the meaning being assigned to it. Speaking frequency, social participation, and processing speed may influence how leadership presence is perceived, but they do not by themselves establish leadership capacity.</p>
+          <div class="lq">
+            <p class="k">Leadership question</p>
+            <p>What behavior do you instinctively read as evidence that someone is ready to lead?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. DECISION 2 ============ -->
+    <section data-stage="3" aria-labelledby="h-3" tabindex="-1">
+      <p class="stagelabel">Part 3 of 5</p>
+      <h2 id="h-3">Decision 2: New information</h2>
+
+      <div class="scene">
+        <p>You learn that Jordan's written recommendations are frequently adopted. Colleagues regularly seek Jordan out for advice. In several meetings, Jordan has been interrupted before finishing a point. Jordan has also shared that time to process before responding leads to stronger contributions.</p>
+      </div>
+
+      <fieldset>
+        <legend>What do you do next?</legend>
+        <p class="hint">Choose one.</p>
+
+        <label class="choice">
+          <input type="radio" name="d2" value="A" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Encourage Jordan to practice speaking faster so others recognize the expertise that is already there.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d2" value="B" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Reconsider what the team means by leadership presence, and examine whether meeting norms reward one communication style more than others.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d2" value="C" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">Keep the original concern in place, because district leaders need to adapt to the dominant meeting culture.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d2" value="D" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Remove meeting participation from consideration entirely and rely only on written work.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+      </fieldset>
+
+      <div class="fb" data-fb="2" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — help Jordan speak faster</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Getting Jordan recognized, working with the room as it is.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The whole adjustment sits with Jordan. It asks Jordan to work against the very thing Jordan says produces stronger contributions, and it leaves the interruptions unaddressed — a behavior belonging to other people in the room.</dd>
+            <dt>What it makes possible</dt>
+            <dd>Recognition for Jordan, if the norm holds. Nothing changes for whoever is in Jordan's position next year.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — reconsider what presence means, and look at the norms</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>The environment as part of the evidence. Being interrupted is a fact about the meeting, not about Jordan.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>That the colleague's concern still needs answering out loud, or this reads as sidestepping it. Broad reexamination can also stall a decision with a deadline attached.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A change that outlasts this candidacy. Interruption and turn-taking are fixable meeting behaviors, and fixing them changes who gets heard from then on.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — leaders adapt to the dominant culture</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>A real constraint. Leaders do work inside cultures they did not design, and pretending otherwise sets someone up to struggle.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The step from describing the culture to requiring it. Held as a standard, an unexamined norm becomes a gate — and the people it filters out are predictable rather than random.</dd>
+            <dt>What it makes possible</dt>
+            <dd>An honest account of the environment Jordan would enter. That belongs in the conversation as information, not as a criterion.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — rely only on written work</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Correcting the bias by removing the contested evidence from the table.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>If the role genuinely involves facilitating groups or speaking for the district, you have deleted a real requirement rather than examined it. One narrow view has been swapped for another.</dd>
+            <dt>What it makes possible</dt>
+            <dd>Clarity about which parts of participation the role truly needs — but only if that question gets asked rather than closed.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="2">See what the other responses assume</button>
+
+        <div class="focus">
+          <p class="k">Feedback focus</p>
+          <p>Additional context does not require you to dismiss every concern. It does change what can reasonably be inferred from the original behavior. A stronger response examines both the individual evidence and the environment in which that evidence is being produced.</p>
+          <div class="lq">
+            <p class="k">Leadership question</p>
+            <p>When does an organizational norm become an invisible test of who appears competent?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. DECISION 3 ============ -->
+    <section data-stage="4" aria-labelledby="h-4" tabindex="-1">
+      <p class="stagelabel">Part 4 of 5</p>
+      <h2 id="h-4">Decision 3: The recommendation</h2>
+      <p>You must now advise the team about Jordan's candidacy.</p>
+
+      <fieldset>
+        <legend>What do you recommend?</legend>
+        <p class="hint">Choose one.</p>
+
+        <label class="choice">
+          <input type="radio" name="d3" value="A" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Recommend Jordan without further discussion, because the new information proves the concern was biased.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d3" value="B" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Recommend against Jordan, because senior leaders should already know how to command a room.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d3" value="C" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">Review the role's actual competencies, compare all candidates against the same evidence-based expectations, and separate required leadership skills from preferred style.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="d3" value="D" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Delay the process until the team reaches complete agreement about the definition of leadership presence.<span class="chosenmark">Your choice</span></span></span>
+        </label>
+      </fieldset>
+
+      <div class="fb" data-fb="3" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — recommend Jordan, the concern was biased</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Naming that the original read was unsupported, and not making Jordan carry the cost of it.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>One quick judgment has been replaced by its mirror image. No other candidate has been compared on the same basis, and <em>proves</em> claims more than the evidence supports. Declaring bias tends to end a conversation rather than change the standard it was using.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A fair hearing for Jordan. The standard the next candidate meets is still invisible.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — senior leaders should command a room</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>A belief about what leadership looks and sounds like, now stated plainly instead of operating quietly. That is worth something.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The belief has not been checked against the role. Commanding a room describes a style; whether this role requires it is a question with an answer, and the posting either says so or it does not.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A useful moment, if the next question is where that expectation came from and whose leadership it was formed by.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — make the standard visible, then apply it to everyone</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>The criteria themselves, and applying one set of them to every candidate.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>That a competency list written inside the same culture can carry the same preferences in more formal language, so the list needs reading too. Run as paperwork after the decision is made, this changes nothing.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A recommendation you could explain to Jordan, to the colleague who raised the concern, and to the next candidate — and a standard that outlasts this hire.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — delay until the team agrees on a definition</p>
+          <dl>
+            <dt>What this centers</dt>
+            <dd>Shared understanding before judgment, and a reluctance to decide on a standard nobody has articulated.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Complete agreement on a word like presence is not reachable, so the condition never clears. Delay is not neutral: candidates wait, the role sits vacant, and the caution can look principled while working as avoidance.</dd>
+            <dt>What it makes possible</dt>
+            <dd>A bounded version of this does work — agree on the competencies the role requires, which is a smaller and answerable question than defining presence.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="3">See what the other responses assume</button>
+
+        <div class="focus">
+          <p class="k">Feedback focus</p>
+          <p>The goal is not to replace one quick judgment with another. It is to make the standard visible, identify what the role truly requires, and use evidence connected to those requirements.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. REFLECTION ============ -->
+    <section data-stage="5" aria-labelledby="h-5" tabindex="-1">
+      <p class="stagelabel">Part 5 of 5</p>
+      <h2 id="h-5">Back to your own leadership</h2>
+
+      <div class="recap" id="recap">
+        <h4>Decision 1 — what do you know?</h4>
+        <p id="r1" class="none">No response chosen.</p>
+        <h4>Decision 2 — new information</h4>
+        <p id="r2" class="none">No response chosen.</p>
+        <h4>Decision 3 — the recommendation</h4>
+        <p id="r3" class="none">No response chosen.</p>
+      </div>
+
+      <p>Jordan is a composite, but the reading you did of Jordan is yours. Finish these three, in your head or in your own notes. Nothing is typed here.</p>
+
+      <ul class="plain stems">
+        <li>A behavior I tend to read quickly as competence is&hellip;</li>
+        <li>A behavior I tend to read quickly as disengagement, resistance, or lack of readiness is&hellip;</li>
+        <li>One question that would help me test that interpretation is&hellip;</li>
+      </ul>
+
+      <div class="lq">
+        <p class="k">Then ask</p>
+        <p>Where did my picture of what a strong leader looks and sounds like come from?</p>
+      </div>
+    </section>
+
+    <nav class="stepnav" aria-label="Move through the activity">
+      <button type="button" class="btn" id="back">Back</button>
+      <button type="button" class="btn primary" id="next">Next</button>
+      <span class="spacer"></span>
+      <span class="counter" id="counter" aria-live="polite">Part 1 of 5 — The situation</span>
+    </nav>
+
+    <div class="tools">
+      <h3>Your responses</h3>
+      <p>Your three selections are kept on this device, in this browser. Nothing is sent anywhere, and nothing you write is collected.</p>
+      <div class="toolrow">
+        <button type="button" class="btn quiet" id="print">Print this case</button>
+        <button type="button" class="btn quiet" id="clear">Clear my responses</button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </div>
+  </main>
+
+  <footer class="src">
+    <h3>Sources</h3>
+    <p>This application draws on the self-reflection, identity, and bias concepts developed throughout Module 1. The Jordan scenario is a fictional composite created for leadership practice and does not represent a specific individual or district.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = "cril-m1-apply-it-v1";
+  var STAGES = ["The situation","What do you know?","New information","The recommendation","Back to your own leadership"];
+  var TOTAL = STAGES.length;
+  var current = 1;
+
+  var SHORT = {
+    "1":{A:"Jordan needs to become more outspoken first.",
+         B:"Jordan may not be interested in leadership.",
+         C:"Not enough evidence yet to judge leadership capacity.",
+         D:"Ask the colleague who has worked with Jordan longer to decide."},
+    "2":{A:"Encourage Jordan to speak faster.",
+         B:"Reconsider what presence means and examine the meeting norms.",
+         C:"Keep the concern; leaders adapt to the dominant culture.",
+         D:"Rely only on written work."},
+    "3":{A:"Recommend Jordan; the concern was biased.",
+         B:"Recommend against; leaders should command a room.",
+         C:"Review the role's competencies and compare all candidates the same way.",
+         D:"Delay until the team agrees on a definition of presence."}
+  };
+
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section[data-stage]"));
+  var trailItems = Array.prototype.slice.call(document.querySelectorAll("#trail li"));
+  var radios = Array.prototype.slice.call(document.querySelectorAll('input[type="radio"]'));
+  var statusEl = document.getElementById("status");
+  var counterEl = document.getElementById("counter");
+  var backBtn = document.getElementById("back");
+  var nextBtn = document.getElementById("next");
+
+  function say(m){ statusEl.textContent = m; }
+
+  /* ---------- storage ---------- */
+  var storage = null;
+  try {
+    window.localStorage.setItem("__probe__","1");
+    window.localStorage.removeItem("__probe__");
+    storage = window.localStorage;
+  } catch (e) { storage = null; }
+
+  function persist(){
+    if (!storage) return;
+    var data = {};
+    radios.forEach(function(r){ if (r.checked) data["d" + r.getAttribute("data-d")] = r.value; });
+    try { storage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function load(){
+    if (!storage) {
+      say("This browser will not let the activity remember your selections between visits. Everything still stays private.");
+      return;
+    }
+    var raw = null;
+    try { raw = storage.getItem(KEY); } catch (e) { return; }
+    if (!raw) return;
+    var data;
+    try { data = JSON.parse(raw); } catch (e) { return; }
+    ["1","2","3"].forEach(function(d){
+      var v = data["d" + d];
+      if (!v) return;
+      var el = document.querySelector('input[name="d' + d + '"][value="' + v + '"]');
+      if (el) { el.checked = true; reveal(d); }
+    });
+    say("Your earlier selections were loaded from this browser.");
+  }
+
+  /* ---------- choices ---------- */
+  function reveal(d){
+    var fb = document.querySelector('.fb[data-fb="' + d + '"]');
+    if (!fb) return;
+    var chosen = document.querySelector('input[name="d' + d + '"]:checked');
+    fb.setAttribute("data-answered", chosen ? "true" : "false");
+    Array.prototype.slice.call(fb.querySelectorAll(".fbitem")).forEach(function(item){
+      var isChosen = chosen && item.getAttribute("data-opt") === chosen.value;
+      item.setAttribute("data-chosen", isChosen ? "true" : "false");
+      var head = item.querySelector(".head");
+      var base = head.getAttribute("data-base") || head.textContent;
+      head.setAttribute("data-base", base);
+      head.textContent = isChosen ? ("Your choice \u2014 " + base.replace(/^Response [A-D] \u2014 /,"")) : base;
+    });
+    updateRecap();
+  }
+
+  radios.forEach(function(r){
+    r.addEventListener("change", function(){
+      var d = r.getAttribute("data-d");
+      reveal(d);
+      persist();
+      var fb = document.querySelector('.fb[data-fb="' + d + '"]');
+      var item = fb.querySelector('.fbitem[data-chosen="true"]');
+      if (item && document.body.getAttribute("data-view") === "steps") {
+        item.setAttribute("tabindex","-1");
+        item.focus({preventScroll:false});
+      }
+    });
+  });
+
+  document.querySelectorAll(".othersbtn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var d = btn.getAttribute("data-others-for");
+      var fb = document.querySelector('.fb[data-fb="' + d + '"]');
+      var open = fb.getAttribute("data-others") === "open";
+      fb.setAttribute("data-others", open ? "closed" : "open");
+      btn.textContent = open ? "See what the other responses assume" : "Hide the other responses";
+      btn.setAttribute("aria-expanded", open ? "false" : "true");
+    });
+    btn.setAttribute("aria-expanded","false");
+  });
+
+  /* ---------- recap ---------- */
+  function updateRecap(){
+    ["1","2","3"].forEach(function(d){
+      var chosen = document.querySelector('input[name="d' + d + '"]:checked');
+      var p = document.getElementById("r" + d);
+      if (chosen) {
+        p.textContent = chosen.value + " \u2014 " + SHORT[d][chosen.value];
+        p.className = "";
+      } else {
+        p.textContent = "No response chosen.";
+        p.className = "none";
+      }
+    });
+  }
+
+  /* ---------- navigation ---------- */
+  function show(n, moveFocus){
+    current = Math.min(Math.max(n,1),TOTAL);
+    sections.forEach(function(s){
+      s.setAttribute("data-active", s.getAttribute("data-stage") === String(current) ? "true" : "false");
+    });
+    trailItems.forEach(function(li,i){
+      var num = i + 1;
+      var state = num === current ? "current" : (num < current ? "done" : "todo");
+      li.setAttribute("data-state", state);
+      var btn = li.querySelector("button");
+      if (num === current) btn.setAttribute("aria-current","step"); else btn.removeAttribute("aria-current");
+      btn.setAttribute("aria-label","Part " + num + " of " + TOTAL + ": " + STAGES[i] + (num === current ? ", you are here" : (state === "done" ? ", visited" : ", not visited yet")));
+    });
+    backBtn.disabled = current === 1;
+    nextBtn.disabled = current === TOTAL;
+    nextBtn.textContent = current === TOTAL - 1 ? "Last part" : "Next";
+    counterEl.textContent = "Part " + current + " of " + TOTAL + " \u2014 " + STAGES[current-1];
+    if (current === TOTAL) updateRecap();
+    if (moveFocus) {
+      var active = document.querySelector('section[data-active="true"]');
+      if (active) active.focus();
+    }
+  }
+
+  backBtn.addEventListener("click", function(){ show(current - 1, true); });
+  nextBtn.addEventListener("click", function(){ show(current + 1, true); });
+  document.querySelectorAll("[data-go]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      if (document.body.getAttribute("data-view") === "linear") setView("steps");
+      show(parseInt(btn.getAttribute("data-go"),10), true);
+    });
+  });
+
+  /* ---------- view switch ---------- */
+  var pillSteps = document.getElementById("pill-steps");
+  var pillLinear = document.getElementById("pill-linear");
+  function setView(mode){
+    document.body.setAttribute("data-view", mode);
+    pillSteps.setAttribute("aria-pressed", mode === "steps" ? "true" : "false");
+    pillLinear.setAttribute("aria-pressed", mode === "linear" ? "true" : "false");
+    if (mode === "linear") {
+      document.querySelectorAll(".fb").forEach(function(fb){ fb.setAttribute("data-answered","true"); });
+      updateRecap();
+    } else {
+      ["1","2","3"].forEach(reveal);
+      show(current, false);
+    }
+  }
+  pillSteps.addEventListener("click", function(){ setView("steps"); });
+  pillLinear.addEventListener("click", function(){ setView("linear"); });
+
+  /* ---------- tools ---------- */
+  document.getElementById("print").addEventListener("click", function(){ window.print(); });
+
+  document.getElementById("clear").addEventListener("click", function(){
+    if (!window.confirm("Clear the three selections you made in this activity?")) return;
+    radios.forEach(function(r){ r.checked = false; });
+    if (storage) { try { storage.removeItem(KEY); } catch (e) {} }
+    document.querySelectorAll(".fb").forEach(function(fb){
+      fb.setAttribute("data-answered","false");
+      fb.setAttribute("data-others","closed");
+    });
+    document.querySelectorAll(".othersbtn").forEach(function(b){
+      b.textContent = "See what the other responses assume";
+      b.setAttribute("aria-expanded","false");
+    });
+    ["1","2","3"].forEach(reveal);
+    say("Cleared. Nothing you selected is left in this browser.");
+    show(1, true);
+  });
+
+  /* ---------- go ---------- */
+  load();
+  updateRecap();
+  show(1, false);
+})();
+</script>
+</body>
+</html>
