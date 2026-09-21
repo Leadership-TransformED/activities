@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Placement Meeting — CRIL Foundations, Module 3 Apply It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#444444;--ink:#2a2a2a;--red:#e3181d;--coral:#ff6486;
+    --warm:#f7f5f4;--line:#e2dedb;--gray:#8d8783;--white:#ffffff;
+    --radius:16px;--radius-sm:10px;--maxw:44rem;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--white);color:var(--ink);
+    font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:26px 20px 40px}
+  p,li{max-width:36em}
+
+  .masthead{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+  .mark{flex:0 0 auto;margin-top:2px}
+  .eyebrow{font-size:.8125rem;font-weight:600;color:var(--gray);margin:0 0 2px}
+  h1{font-size:1.75rem;line-height:1.2;font-weight:800;color:var(--charcoal);margin:0 0 4px;letter-spacing:-.015em}
+  .minutes{font-size:.875rem;color:var(--gray);margin:0}
+
+  .trail{margin:0 0 20px}
+  .trail ol{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+  .trail li{flex:1 1 auto;min-width:0}
+  .chev{display:flex;align-items:center;gap:7px;padding:9px 12px 9px 14px;background:var(--warm);
+    color:var(--gray);border:1px solid var(--line);border-radius:var(--radius-sm);
+    font-size:.8125rem;font-weight:600;white-space:nowrap;width:100%;text-align:left;font-family:inherit;cursor:pointer}
+  .chev .num{flex:0 0 auto;width:1.35rem;height:1.35rem;border-radius:50%;display:grid;place-items:center;
+    font-size:.75rem;font-weight:700;background:var(--white);border:1px solid var(--line);color:var(--gray)}
+  .chev .name{overflow:hidden;text-overflow:ellipsis}
+  li[data-state="done"] .chev{background:#ebe7e4;color:var(--charcoal);border-color:#d8d3cf}
+  li[data-state="done"] .chev .num{background:var(--charcoal);border-color:var(--charcoal);color:var(--white)}
+  li[data-state="current"] .chev{background:var(--red);border-color:var(--red);color:var(--white)}
+  li[data-state="current"] .chev .num{background:var(--white);border-color:var(--white);color:var(--red)}
+
+  .viewswitch{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 24px;font-size:.875rem}
+  .viewswitch .label{color:var(--gray);font-weight:600}
+  .pillset{display:flex;gap:6px;background:var(--warm);border:1px solid var(--line);border-radius:999px;padding:4px}
+  .pill{font-family:inherit;font-size:.8125rem;font-weight:600;border:0;background:transparent;
+    color:var(--charcoal);padding:6px 13px;border-radius:999px;cursor:pointer}
+  .pill[aria-pressed="true"]{background:var(--charcoal);color:var(--white)}
+
+  h2{font-size:1.3rem;line-height:1.25;font-weight:800;color:var(--charcoal);margin:0 0 10px;letter-spacing:-.01em}
+  h3{font-size:1.0625rem;font-weight:700;color:var(--charcoal);margin:26px 0 6px}
+  .lede{color:var(--charcoal)}
+  .scene{background:var(--warm);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 4px;margin:18px 0}
+  .scene h3:first-child{margin-top:0}
+  .scene p{margin:0 0 14px}
+  .quote{border-left:4px solid var(--coral);padding:2px 0 2px 14px;margin:0 0 14px;font-size:1.0625rem;color:var(--charcoal)}
+  .note{background:var(--warm);border:1px solid var(--line);border-left:4px solid var(--coral);
+    border-radius:var(--radius-sm);padding:14px 16px;margin:20px 0}
+  .note p{margin:0;font-size:.9375rem}
+
+  fieldset{border:0;margin:20px 0 0;padding:0}
+  legend{font-size:1rem;font-weight:700;color:var(--charcoal);padding:0;margin:0 0 4px}
+  .hint{font-size:.875rem;color:var(--gray);margin:0 0 12px}
+  .choice{display:block;margin:0 0 10px;position:relative}
+  .choice input{position:absolute;opacity:0;width:1px;height:1px}
+  .choice .box{display:flex;gap:12px;align-items:flex-start;border:1px solid #cfc9c5;
+    border-radius:var(--radius-sm);padding:14px 15px;background:var(--white);cursor:pointer}
+  .choice .letter{flex:0 0 auto;width:1.7rem;height:1.7rem;border-radius:8px;display:grid;place-items:center;
+    font-size:.875rem;font-weight:800;background:var(--warm);border:1px solid var(--line);color:var(--charcoal)}
+  .choice .text{flex:1 1 auto;max-width:none}
+  .choice .box:hover{border-color:var(--charcoal)}
+  .choice input:focus-visible + .box{outline:3px solid var(--red);outline-offset:2px}
+  .choice input:checked + .box{border-color:var(--red);border-width:2px;padding:13px 14px;background:#fff7f7}
+  .choice input:checked + .box .letter{background:var(--red);border-color:var(--red);color:var(--white)}
+  .choice .chosenmark{display:none;font-size:.75rem;font-weight:800;color:var(--red);margin-top:4px}
+  .choice input:checked + .box .chosenmark{display:block}
+
+  .fb{margin:22px 0 0}
+  .fb[data-answered="false"]{display:none}
+  .fbitem{border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 12px;background:var(--white)}
+  .fbitem[data-chosen="true"]{border-color:#d8d3cf;background:var(--warm)}
+  .fbitem .head{font-size:.8125rem;font-weight:800;color:var(--charcoal);margin:0 0 10px}
+  .fbitem[data-chosen="true"] .head{color:var(--red)}
+  .fbitem dl{margin:0}
+  .fbitem dt{font-size:.75rem;font-weight:800;color:var(--gray);margin:12px 0 2px}
+  .fbitem dt:first-child{margin-top:0}
+  .fbitem dd{margin:0;font-size:.9375rem}
+  .focus{border-top:1px solid var(--line);margin:18px 0 0;padding:16px 0 0}
+  .lq{background:var(--warm);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin:0}
+  .lq .k{font-size:.75rem;font-weight:800;color:var(--red);margin:0 0 4px}
+  .lq p{margin:0;font-weight:600;color:var(--charcoal)}
+
+  ul.plain{padding-left:1.15em;margin:10px 0}
+  ul.plain li{margin:0 0 8px}
+  .stems li{margin:0 0 12px;font-weight:600;color:var(--charcoal)}
+  .recap{border:1px solid var(--line);border-radius:var(--radius);padding:4px 18px 18px;margin:18px 0}
+  .recap h4{font-size:.75rem;font-weight:800;color:var(--gray);margin:18px 0 2px}
+  .recap p{margin:0;font-size:.9375rem}
+  .recap .none{color:var(--gray);font-style:italic}
+  .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  .stepnav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:30px 0 0;padding-top:20px;border-top:1px solid var(--line)}
+  .btn{font-family:inherit;font-size:.9375rem;font-weight:700;padding:11px 20px;border-radius:999px;
+    cursor:pointer;border:1px solid var(--charcoal);background:var(--white);color:var(--charcoal)}
+  .btn.primary{background:var(--red);border-color:var(--red);color:var(--white)}
+  .btn.quiet{border-color:var(--line);color:var(--charcoal);font-weight:600}
+  .btn:disabled{opacity:.4;cursor:default}
+  .spacer{flex:1 1 auto}
+  .counter{font-size:.8125rem;color:var(--gray);font-weight:600}
+  .tools{margin:28px 0 0;padding:18px;background:var(--warm);border:1px solid var(--line);border-radius:var(--radius)}
+  .tools h3{margin:0 0 4px;font-size:1rem}
+  .tools p{font-size:.875rem;margin:0 0 14px;color:var(--charcoal)}
+  .toolrow{display:flex;flex-wrap:wrap;gap:8px}
+  .status{font-size:.8125rem;color:var(--charcoal);margin:12px 0 0;min-height:1.2em}
+  :is(button,a,summary,input,[tabindex]):focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+  footer.src{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);color:var(--gray);font-size:.875rem}
+  footer.src h3{font-size:.875rem;color:var(--gray);margin:0 0 6px}
+  footer.src p{margin:0 0 8px;max-width:40em}
+
+  body[data-view="steps"] section[data-stage]:not([data-active="true"]){display:none}
+  body[data-view="steps"] .fb:not([data-others="open"]) .fbitem[data-chosen="false"]{display:none}
+  body[data-view="linear"] .trail,body[data-view="linear"] .stepnav,body[data-view="linear"] .othersbtn{display:none}
+  body[data-view="linear"] .fb{display:block!important}
+  body[data-view="linear"] section[data-stage]{display:block;margin:0 0 26px;padding:0 0 10px;border-bottom:1px solid var(--line)}
+  body[data-view="linear"] section[data-stage="6"]{border-bottom:0}
+  body[data-view="linear"] .stagelabel{display:block}
+  .stagelabel{display:none;font-size:.75rem;font-weight:800;color:var(--red);margin:0 0 4px}
+
+  @media (max-width:560px){
+    body{font-size:16px}
+    .wrap{padding:20px 16px 34px}
+    h1{font-size:1.4rem}
+    .trail .name{display:none}
+    .chev{justify-content:center;padding:9px 6px}
+    li[data-state="current"] .chev{padding:9px 12px}
+    li[data-state="current"] .chev .name{display:inline}
+    .btn{width:100%;text-align:center}
+    .spacer{display:none}
+    .stepnav{flex-direction:column;align-items:stretch}
+    .counter{text-align:center}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+  @media print{
+    .trail,.viewswitch,.stepnav,.tools,.othersbtn{display:none}
+    section[data-stage]{display:block!important;page-break-inside:avoid}
+    .fb,.fbitem{display:block!important}
+    body{font-size:12pt}
+  }
+</style>
+</head>
+<body data-view="steps">
+<div class="wrap">
+
+  <header class="masthead">
+    <svg class="mark" width="42" height="42" viewBox="0 0 42 42" role="img" aria-label="Leadership TransformED chevron mark" focusable="false">
+      <path d="M4 7 L16 21 L4 35" fill="none" stroke="#d8d3cf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 7 L26 21 L14 35" fill="none" stroke="#444444" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 7 L36 21 L24 35" fill="none" stroke="#e3181d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <p class="eyebrow">CRIL Foundations, Module 3 — Apply It</p>
+      <h1>The Placement Meeting</h1>
+      <p class="minutes">About 10 minutes. Private to you.</p>
+    </div>
+  </header>
+
+  <nav class="trail" aria-label="Activity progress">
+    <ol id="trail">
+      <li data-state="current"><button type="button" class="chev" data-go="1"><span class="num" aria-hidden="true">1</span><span class="name">The situation</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="2"><span class="num" aria-hidden="true">2</span><span class="name">What to clarify</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="3"><span class="num" aria-hidden="true">3</span><span class="name">Whose evidence</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="4"><span class="num" aria-hidden="true">4</span><span class="name">The meeting</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="5"><span class="num" aria-hidden="true">5</span><span class="name">The recommendation</span></button></li>
+      <li data-state="todo"><button type="button" class="chev" data-go="6"><span class="num" aria-hidden="true">6</span><span class="name">Your leadership</span></button></li>
+    </ol>
+  </nav>
+
+  <div class="viewswitch">
+    <span class="label" id="viewlabel">How you'd like to work:</span>
+    <div class="pillset" role="group" aria-labelledby="viewlabel">
+      <button type="button" class="pill" id="pill-steps" aria-pressed="true">One decision at a time</button>
+      <button type="button" class="pill" id="pill-linear" aria-pressed="false">Everything on one page</button>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ 1 ============ -->
+    <section data-stage="1" data-active="true" aria-labelledby="h-1" tabindex="-1">
+      <p class="stagelabel">Part 1 of 6</p>
+      <h2 id="h-1">About this application</h2>
+      <p class="lede">Try It asked you to examine your everyday leadership moves. Apply It asks you to make decisions in a situation where several forms of evidence compete, and where a familiar process may not be as neutral as it first appears.</p>
+      <p>There is no score. The purpose is to notice what your decision treats as evidence, whose knowledge you count, and what tradeoffs your choice creates.</p>
+
+      <div class="scene">
+        <h3>The leadership situation</h3>
+        <p>You are the principal of a middle school. One seat remains in Advanced Math 7.</p>
+        <p>A student has strong classwork and consistently high course grades, but scored below the usual placement-test range. The student's parent has written asking for placement in the advanced section. Two staff members recommend against placement, citing concerns about pace and readiness. Another teacher points to the student's sustained classroom performance and persistence.</p>
+        <p>The current process considers test scores, grades, teacher recommendations, and family requests — but the team has never clearly agreed on how those pieces should be weighted when they conflict.</p>
+      </div>
+
+      <h3>What you'll do</h3>
+      <p>Work through four leadership decisions. Choose the response closest to what you would actually do. After each choice you can read what all four responses treat as evidence, what each protects, and what each risks overlooking. There is no correct answer and nothing is scored.</p>
+
+      <div class="note">
+        <p><strong>Nothing here is submitted.</strong> Your selections stay in this browser and are never sent anywhere or seen by a facilitator or your cohort. There is nothing to type — the reflection at the end is yours to think through or write in your own notes.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. DECISION 1 ============ -->
+    <section data-stage="2" aria-labelledby="h-2" tabindex="-1">
+      <p class="stagelabel">Part 2 of 6</p>
+      <h2 id="h-2">Decision 1: What do you clarify first?</h2>
+      <p>The team is assembled and the decision is on today's agenda.</p>
+
+      <fieldset>
+        <legend>Which response is closest to what you would do?</legend>
+        <p class="hint">Choose one.</p>
+        <label class="choice"><input type="radio" name="d1" value="A" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Ask staff to vote on whether the student is ready.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d1" value="B" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Clarify the actual criteria for advanced placement and identify where professional judgment enters the process.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d1" value="C" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">Use the placement-test score, because it is the most objective measure available.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d1" value="D" data-d="1">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Place the student because the parent has requested it.<span class="chosenmark">Your choice</span></span></span></label>
+      </fieldset>
+
+      <div class="fb" data-fb="1" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — put it to a staff vote</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The team's collective read. It feels fair, it is fast, and it shares the weight of a hard call.</dd>
+            <dt>What it protects</dt>
+            <dd>Staff ownership of the decision, and your own position if it is questioned later.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>A vote counts opinions without asking what they rest on. With two staff already recommending against, the outcome is largely set before anyone votes — and the criteria are still unstated, so the majority's habits quietly become the standard.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — clarify the criteria and name where judgment enters</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The process itself, examined before any student is discussed.</dd>
+            <dt>What it protects</dt>
+            <dd>Every student who comes through this process after today, and the staff, who are currently being asked to judge against a standard no one has written down.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It takes meeting time, and can read as stalling to people who came ready to decide. Naming the criteria also does not yet ask whether the criteria are the right ones — that is a further question.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — the test score, as the most objective measure</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>A single comparable number, on the reasoning that standardized means neutral.</dd>
+            <dt>What it protects</dt>
+            <dd>Consistency you can defend on paper, and the meeting from a long argument.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>An instrument being standardized is not the same as the decision being neutral. Someone chose the cut score, the date, the format, and the conditions. Choosing the test as the tiebreaker is itself professional judgment — just judgment that leaves no fingerprints.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — place the student because the parent asked</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The family's knowledge of their own child, which is real evidence and is often discounted.</dd>
+            <dt>What it protects</dt>
+            <dd>This family's trust, and the student's access to the seat.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It answers the request rather than the question, and none of what the team knows has been weighed. A process that moves for whoever asks favors families who know it can be asked — which is not the same as responding to families.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="1">See what the other responses assume</button>
+        <div class="focus">
+          <div class="lq"><p class="k">Leadership question</p><p>Where does human judgment enter a process that people describe as objective?</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. DECISION 2 ============ -->
+    <section data-stage="3" aria-labelledby="h-3" tabindex="-1">
+      <p class="stagelabel">Part 3 of 6</p>
+      <h2 id="h-3">Decision 2: Whose evidence counts?</h2>
+
+      <div class="scene">
+        <p>You learn that the student's classroom work includes sustained success on complex tasks, and that the placement test was completed on a day the student arrived late after a transportation disruption.</p>
+      </div>
+
+      <fieldset>
+        <legend>What do you do with that?</legend>
+        <p class="hint">Choose one.</p>
+        <label class="choice"><input type="radio" name="d2" value="A" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Treat the test as the strongest evidence because it is standardized.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d2" value="B" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Disregard the test completely and rely on classroom grades.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d2" value="C" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">Review multiple sources of evidence, including classroom performance, the testing context, the student's own perspective, and teacher observations tied to specific skills.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d2" value="D" data-d="2">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Ask the parent to decide whether the student can handle the course.<span class="chosenmark">Your choice</span></span></span></label>
+      </fieldset>
+
+      <div class="fb" data-fb="2" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — the test is standardized, so it stands</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Comparability across students, on the principle that fairness means one measure applied the same way to everyone.</dd>
+            <dt>What it protects</dt>
+            <dd>The appearance of even-handedness, and the team from having to weigh anything.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>What you just learned. A late arrival after a transportation disruption is information about the measurement, not an excuse for the student — the standardized conditions were not standard that morning. Holding the score as strongest now requires ignoring a known problem with it.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — set the test aside, rely on grades</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Sustained performance over months, rather than one sitting.</dd>
+            <dt>What it protects</dt>
+            <dd>The student from a single bad morning, and the daily evidence teachers actually see.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Grades vary by teacher and by how much rigor sits behind them, so they need the same scrutiny. Discarding a measure entirely is the mirror image of over-weighting it, and the test may still say something useful about specific skills worth supporting.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — several sources, each tied to specific skills</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Each source as evidence about something particular, including the conditions the test was taken under — and the student, who is the only person in the situation nobody has asked.</dd>
+            <dt>What it protects</dt>
+            <dd>Both rigor and access. It can name what the student can already do and what support the course would require.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It takes longer, and "multiple measures" becomes cover if nobody says which skills the course actually demands. Gathering can also substitute for deciding, and the seat is being decided today.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — ask the parent to decide</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Family authority over the child's path, which sounds respectful and defers to the person who knows the student longest.</dd>
+            <dt>What it protects</dt>
+            <dd>You, mostly. The decision and its consequences move across the table.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It hands a professional judgment to someone without the professional information, and if the placement goes badly the family carries the blame for it. Asking a parent to choose between their child's opportunity and their child's struggle is not a real choice. Family perspective belongs in the decision, not as the decision.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="2">See what the other responses assume</button>
+        <div class="focus">
+          <div class="lq"><p class="k">Leadership question</p><p>What becomes visible when context is treated as relevant evidence rather than as an excuse?</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. DECISION 3 ============ -->
+    <section data-stage="4" aria-labelledby="h-4" tabindex="-1">
+      <p class="stagelabel">Part 4 of 6</p>
+      <h2 id="h-4">Decision 3: The meeting dynamic</h2>
+
+      <div class="scene">
+        <p>During the discussion, one staff member says:</p>
+        <p class="quote">&ldquo;Families always think their child should be in the advanced class.&rdquo;</p>
+        <p>The parent is not present.</p>
+      </div>
+
+      <fieldset>
+        <legend>What do you do?</legend>
+        <p class="hint">Choose one.</p>
+        <label class="choice"><input type="radio" name="d3" value="A" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Let the comment pass so the meeting can stay focused.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d3" value="B" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Redirect the conversation to evidence and ask the team not to generalize about families.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d3" value="C" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">End the meeting immediately, because the comment was inappropriate.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d3" value="D" data-d="3">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Agree that family advocacy should carry less weight than staff judgment.<span class="chosenmark">Your choice</span></span></span></label>
+      </fieldset>
+
+      <div class="fb" data-fb="3" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — let it pass</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>That the comment is a side remark rather than part of the deliberation.</dd>
+            <dt>What it protects</dt>
+            <dd>Momentum, the relationship with that staff member, and a decision that is due today.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Silence from the person with authority reads as agreement. The generalization stays in the room and shapes how this parent's request gets weighed, and the rest of the team learns that remarks like it are fine here.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — redirect to evidence, name the generalization</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>This family's actual request, rather than a category of families.</dd>
+            <dt>What it protects</dt>
+            <dd>The absent parent, the norm for the meeting, and the staff member's standing — the comment is addressed without a public reprimand.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Wording carries a lot here; even a light redirect can land as a rebuke in front of colleagues. And a redirect alone may leave the moment unfinished — a private follow-up is often the other half of it.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — end the meeting</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The seriousness of the comment, refusing to carry on as though nothing was said.</dd>
+            <dt>What it protects</dt>
+            <dd>A clear line, unmistakably drawn.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The cost lands on the student and the family, who now wait. It also tends to make the episode about the staff member rather than about the standard, and teams that experience this usually learn to say less rather than to think differently. A comment of this kind can be addressed in the room.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — family advocacy should count for less</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Professional expertise as the more reliable source, and a real concern that persistent requests can bend a process.</dd>
+            <dt>What it protects</dt>
+            <dd>Staff judgment, and consistency against the loudest voice.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It turns the generalization into policy. Discounting advocacy as a class discounts the families with the least access to you as much as the most persistent ones — and it does not solve the actual problem, which is that nobody has said how a family request is weighed for anyone.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="3">See what the other responses assume</button>
+        <div class="focus">
+          <div class="lq"><p class="k">Leadership question</p><p>What does a leader communicate when a generalization goes unexamined?</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. DECISION 4 ============ -->
+    <section data-stage="5" aria-labelledby="h-5" tabindex="-1">
+      <p class="stagelabel">Part 5 of 6</p>
+      <h2 id="h-5">Decision 4: The recommendation</h2>
+      <p>The evidence remains mixed. The team must make a decision today.</p>
+
+      <fieldset>
+        <legend>What do you decide?</legend>
+        <p class="hint">Choose one.</p>
+        <label class="choice"><input type="radio" name="d4" value="A" data-d="4">
+          <span class="box"><span class="letter" aria-hidden="true">A</span><span class="text">Maintain the usual placement, because consistency matters most.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d4" value="B" data-d="4">
+          <span class="box"><span class="letter" aria-hidden="true">B</span><span class="text">Place the student, with no follow-up plan.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d4" value="C" data-d="4">
+          <span class="box"><span class="letter" aria-hidden="true">C</span><span class="text">Make a time-limited placement decision with clear academic supports, defined evidence to review, and a scheduled check-in, rather than treating the decision as irreversible.<span class="chosenmark">Your choice</span></span></span></label>
+        <label class="choice"><input type="radio" name="d4" value="D" data-d="4">
+          <span class="box"><span class="letter" aria-hidden="true">D</span><span class="text">Delay the decision until the team has perfect information.<span class="chosenmark">Your choice</span></span></span></label>
+      </fieldset>
+
+      <div class="fb" data-fb="4" data-answered="false" data-others="closed">
+        <div class="fbitem" data-opt="A" data-chosen="false">
+          <p class="head">Response A — maintain the usual placement</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>Precedent, and the value of a process people can predict.</dd>
+            <dt>What it protects</dt>
+            <dd>Against favoritism, and against a decision that looks like it was won by whoever pushed hardest. Not a small thing.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Consistency with a process the team has just agreed has no stated weighting is consistency with a habit. Whatever that habit has been producing, it goes on producing — and this case, which surfaced the gap, teaches the team nothing.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="B" data-chosen="false">
+          <p class="head">Response B — place the student, no follow-up</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The classroom record, and the case for giving the benefit of the doubt.</dd>
+            <dt>What it protects</dt>
+            <dd>Access to the seat, today.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>The whole risk now sits with the student. No supports, no agreed evidence to look at, no one scheduled to notice. If it goes badly, it becomes a story the school tells about students like this one for years — and the story will blame the student rather than the plan.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="C" data-chosen="false">
+          <p class="head">Response C — time-limited, supported, with a check-in</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>What is known now, plus what the next few weeks would show — and it says in advance what would count.</dd>
+            <dt>What it protects</dt>
+            <dd>Rigor and access at once, and it leaves a record the team can use the next time evidence conflicts. That is how a process actually changes.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>It only works if someone owns the follow-through; an unheld check-in becomes either a permanent placement nobody examined or a quiet removal. And "time-limited" can land on a student and family as probation, so how it is said matters as much as what it is.</dd>
+          </dl>
+        </div>
+        <div class="fbitem" data-opt="D" data-chosen="false">
+          <p class="head">Response D — delay until the information is complete</p>
+          <dl>
+            <dt>What this treats as evidence</dt>
+            <dd>The gaps. It takes seriously that the picture is incomplete.</dd>
+            <dt>What it protects</dt>
+            <dd>The team from deciding badly under pressure.</dd>
+            <dt>What it risks overlooking</dt>
+            <dd>Perfect information does not arrive, and the seat and the schedule do not wait for it. Delay is itself a decision — it just is not recorded as one, and it resolves as the usual placement by default. A short, bounded pause for one specific missing piece is a different thing, and defensible.</dd>
+          </dl>
+        </div>
+        <button type="button" class="btn quiet othersbtn" data-others-for="4">See what the other responses assume</button>
+        <div class="focus">
+          <div class="lq"><p class="k">Leadership question</p><p>How do you preserve rigor while refusing to confuse one narrow measure with the full picture of readiness?</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. REFLECTION ============ -->
+    <section data-stage="6" aria-labelledby="h-6" tabindex="-1">
+      <p class="stagelabel">Part 6 of 6</p>
+      <h2 id="h-6">Back to your own leadership</h2>
+
+      <div class="recap" id="recap">
+        <h4>Decision 1 — what you clarified first</h4>
+        <p id="r1" class="none">No response chosen.</p>
+        <h4>Decision 2 — whose evidence counted</h4>
+        <p id="r2" class="none">No response chosen.</p>
+        <h4>Decision 3 — the meeting dynamic</h4>
+        <p id="r3" class="none">No response chosen.</p>
+        <h4>Decision 4 — the recommendation</h4>
+        <p id="r4" class="none">No response chosen.</p>
+      </div>
+
+      <p>Finish these three, in your head or in your own notes. Nothing is typed here.</p>
+      <ul class="plain stems">
+        <li>The evidence I tend to trust most quickly is&hellip;</li>
+        <li>The perspective I need to seek earlier is&hellip;</li>
+        <li>One routine in my own context where &ldquo;consistency&rdquo; may hide unexamined judgment is&hellip;</li>
+      </ul>
+
+      <div class="lq">
+        <p class="k">Then ask</p>
+        <p>What would change if I judged the quality of this decision not only by whether the process was followed, but also by whose evidence and experience the process allowed me to see?</p>
+      </div>
+    </section>
+
+    <nav class="stepnav" aria-label="Move through the activity">
+      <button type="button" class="btn" id="back">Back</button>
+      <button type="button" class="btn primary" id="next">Next</button>
+      <span class="spacer"></span>
+      <span class="counter" id="counter" aria-live="polite">Part 1 of 6 — The situation</span>
+    </nav>
+
+    <div class="tools">
+      <h3>Your responses</h3>
+      <p>Your four selections are kept on this device, in this browser. Nothing is sent anywhere, and nothing you write is collected.</p>
+      <div class="toolrow">
+        <button type="button" class="btn quiet" id="print">Print this case</button>
+        <button type="button" class="btn quiet" id="clear">Clear my responses</button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </div>
+  </main>
+
+  <footer class="src">
+    <h3>Sources</h3>
+    <p>This fictional composite case applies the culturally responsive school leadership concepts developed throughout Module 3. It does not represent a specific student, school, family, or district.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = "cril-m3-apply-it-v1";
+  var STAGES = ["The situation","What do you clarify first?","Whose evidence counts?","The meeting dynamic","The recommendation","Back to your own leadership"];
+  var TOTAL = STAGES.length;
+  var current = 1;
+
+  var SHORT = {
+    "1":{A:"Put readiness to a staff vote.",
+         B:"Clarify the criteria and name where judgment enters.",
+         C:"Use the placement-test score as the objective measure.",
+         D:"Place the student because the parent asked."},
+    "2":{A:"Treat the standardized test as strongest.",
+         B:"Disregard the test, rely on grades.",
+         C:"Review several sources, including context and the student's perspective.",
+         D:"Ask the parent to decide."},
+    "3":{A:"Let the comment pass.",
+         B:"Redirect to evidence, name the generalization.",
+         C:"End the meeting.",
+         D:"Agree family advocacy counts for less."},
+    "4":{A:"Maintain the usual placement.",
+         B:"Place the student with no follow-up.",
+         C:"Time-limited placement with supports and a check-in.",
+         D:"Delay until the information is complete."}
+  };
+
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section[data-stage]"));
+  var trailItems = Array.prototype.slice.call(document.querySelectorAll("#trail li"));
+  var radios = Array.prototype.slice.call(document.querySelectorAll('input[type="radio"]'));
+  var statusEl = document.getElementById("status");
+  var counterEl = document.getElementById("counter");
+  var backBtn = document.getElementById("back");
+  var nextBtn = document.getElementById("next");
+  var DS = ["1","2","3","4"];
+
+  function say(m){ statusEl.textContent = m; }
+
+  var storage = null;
+  try {
+    window.localStorage.setItem("__probe__","1");
+    window.localStorage.removeItem("__probe__");
+    storage = window.localStorage;
+  } catch (e) { storage = null; }
+
+  function persist(){
+    if (!storage) return;
+    var data = {};
+    radios.forEach(function(r){ if (r.checked) data["d" + r.getAttribute("data-d")] = r.value; });
+    try { storage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function load(){
+    if (!storage) { say("This browser will not let the activity remember your selections between visits. Everything still stays private."); return; }
+    var raw = null;
+    try { raw = storage.getItem(KEY); } catch (e) { return; }
+    if (!raw) return;
+    var data;
+    try { data = JSON.parse(raw); } catch (e) { return; }
+    DS.forEach(function(d){
+      var v = data["d" + d];
+      if (!v) return;
+      var el = document.querySelector('input[name="d' + d + '"][value="' + v + '"]');
+      if (el){ el.checked = true; reveal(d); }
+    });
+    say("Your earlier selections were loaded from this browser.");
+  }
+
+  function reveal(d){
+    var fb = document.querySelector('.fb[data-fb="' + d + '"]');
+    if (!fb) return;
+    var chosen = document.querySelector('input[name="d' + d + '"]:checked');
+    fb.setAttribute("data-answered", chosen ? "true" : "false");
+    Array.prototype.slice.call(fb.querySelectorAll(".fbitem")).forEach(function(item){
+      var isChosen = chosen && item.getAttribute("data-opt") === chosen.value;
+      item.setAttribute("data-chosen", isChosen ? "true" : "false");
+      var head = item.querySelector(".head");
+      var base = head.getAttribute("data-base") || head.textContent;
+      head.setAttribute("data-base", base);
+      head.textContent = isChosen ? ("Your choice \u2014 " + base.replace(/^Response [A-D] \u2014 /,"")) : base;
+    });
+    updateRecap();
+  }
+
+  radios.forEach(function(r){
+    r.addEventListener("change", function(){
+      var d = r.getAttribute("data-d");
+      reveal(d);
+      persist();
+      if (document.body.getAttribute("data-view") === "steps"){
+        var item = document.querySelector('.fb[data-fb="' + d + '"] .fbitem[data-chosen="true"]');
+        if (item){ item.setAttribute("tabindex","-1"); item.focus(); }
+      }
+    });
+  });
+
+  document.querySelectorAll(".othersbtn").forEach(function(btn){
+    btn.setAttribute("aria-expanded","false");
+    btn.addEventListener("click", function(){
+      var d = btn.getAttribute("data-others-for");
+      var fb = document.querySelector('.fb[data-fb="' + d + '"]');
+      var open = fb.getAttribute("data-others") === "open";
+      fb.setAttribute("data-others", open ? "closed" : "open");
+      btn.textContent = open ? "See what the other responses assume" : "Hide the other responses";
+      btn.setAttribute("aria-expanded", open ? "false" : "true");
+    });
+  });
+
+  function updateRecap(){
+    DS.forEach(function(d){
+      var chosen = document.querySelector('input[name="d' + d + '"]:checked');
+      var p = document.getElementById("r" + d);
+      if (!p) return;
+      if (chosen){ p.textContent = chosen.value + " \u2014 " + SHORT[d][chosen.value]; p.className = ""; }
+      else { p.textContent = "No response chosen."; p.className = "none"; }
+    });
+  }
+
+  function show(n, moveFocus){
+    current = Math.min(Math.max(n,1),TOTAL);
+    sections.forEach(function(s){
+      s.setAttribute("data-active", s.getAttribute("data-stage") === String(current) ? "true" : "false");
+    });
+    trailItems.forEach(function(li,i){
+      var num = i + 1;
+      var state = num === current ? "current" : (num < current ? "done" : "todo");
+      li.setAttribute("data-state", state);
+      var btn = li.querySelector("button");
+      if (num === current) btn.setAttribute("aria-current","step"); else btn.removeAttribute("aria-current");
+      btn.setAttribute("aria-label","Part " + num + " of " + TOTAL + ": " + STAGES[i] + (num === current ? ", you are here" : (state === "done" ? ", visited" : ", not visited yet")));
+    });
+    backBtn.disabled = current === 1;
+    nextBtn.disabled = current === TOTAL;
+    nextBtn.textContent = current === TOTAL - 1 ? "Last part" : "Next";
+    counterEl.textContent = "Part " + current + " of " + TOTAL + " \u2014 " + STAGES[current-1];
+    if (current === TOTAL) updateRecap();
+    if (moveFocus){
+      var active = document.querySelector('section[data-active="true"]');
+      if (active) active.focus();
+    }
+  }
+
+  backBtn.addEventListener("click", function(){ show(current - 1, true); });
+  nextBtn.addEventListener("click", function(){ show(current + 1, true); });
+  document.querySelectorAll("[data-go]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      if (document.body.getAttribute("data-view") === "linear") setView("steps");
+      show(parseInt(btn.getAttribute("data-go"),10), true);
+    });
+  });
+
+  var pillSteps = document.getElementById("pill-steps");
+  var pillLinear = document.getElementById("pill-linear");
+  function setView(mode){
+    document.body.setAttribute("data-view", mode);
+    pillSteps.setAttribute("aria-pressed", mode === "steps" ? "true" : "false");
+    pillLinear.setAttribute("aria-pressed", mode === "linear" ? "true" : "false");
+    if (mode === "linear"){
+      document.querySelectorAll(".fb").forEach(function(fb){ fb.setAttribute("data-answered","true"); });
+      updateRecap();
+    } else {
+      DS.forEach(reveal);
+      show(current, false);
+    }
+  }
+  pillSteps.addEventListener("click", function(){ setView("steps"); });
+  pillLinear.addEventListener("click", function(){ setView("linear"); });
+
+  document.getElementById("print").addEventListener("click", function(){ window.print(); });
+
+  document.getElementById("clear").addEventListener("click", function(){
+    if (!window.confirm("Clear the selections you made in this activity?")) return;
+    radios.forEach(function(r){ r.checked = false; });
+    if (storage){ try { storage.removeItem(KEY); } catch (e) {} }
+    document.querySelectorAll(".fb").forEach(function(fb){
+      fb.setAttribute("data-answered","false");
+      fb.setAttribute("data-others","closed");
+    });
+    document.querySelectorAll(".othersbtn").forEach(function(b){
+      b.textContent = "See what the other responses assume";
+      b.setAttribute("aria-expanded","false");
+    });
+    DS.forEach(reveal);
+    say("Cleared. Nothing you selected is left in this browser.");
+    show(1, true);
+  });
+
+  load();
+  updateRecap();
+  show(1, false);
+})();
+</script>
+</body>
+</html>
