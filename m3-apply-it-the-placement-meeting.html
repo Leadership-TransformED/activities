@@ -115,16 +115,13 @@
   .status{font-size:.8125rem;color:var(--charcoal);margin:12px 0 0;min-height:1.2em}
   :is(button,a,summary,input,[tabindex]):focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
-  footer.src{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);color:var(--gray);font-size:.875rem}
-  footer.src h3{font-size:.875rem;color:var(--gray);margin:0 0 6px}
-  footer.src p{margin:0 0 8px;max-width:40em}
 
   body[data-view="steps"] section[data-stage]:not([data-active="true"]){display:none}
   body[data-view="steps"] .fb:not([data-others="open"]) .fbitem[data-chosen="false"]{display:none}
   body[data-view="linear"] .trail,body[data-view="linear"] .stepnav,body[data-view="linear"] .othersbtn{display:none}
   body[data-view="linear"] .fb{display:block!important}
   body[data-view="linear"] section[data-stage]{display:block;margin:0 0 26px;padding:0 0 10px;border-bottom:1px solid var(--line)}
-  body[data-view="linear"] section[data-stage="6"]{border-bottom:0}
+  body[data-view="linear"] section[data-stage="5"]{border-bottom:0}
   body[data-view="linear"] .stagelabel{display:block}
   .stagelabel{display:none;font-size:.75rem;font-weight:800;color:var(--red);margin:0 0 4px}
 
@@ -173,7 +170,6 @@
       <li data-state="todo"><button type="button" class="chev" data-go="3"><span class="num" aria-hidden="true">3</span><span class="name">Whose evidence</span></button></li>
       <li data-state="todo"><button type="button" class="chev" data-go="4"><span class="num" aria-hidden="true">4</span><span class="name">The meeting</span></button></li>
       <li data-state="todo"><button type="button" class="chev" data-go="5"><span class="num" aria-hidden="true">5</span><span class="name">The recommendation</span></button></li>
-      <li data-state="todo"><button type="button" class="chev" data-go="6"><span class="num" aria-hidden="true">6</span><span class="name">Your leadership</span></button></li>
     </ol>
   </nav>
 
@@ -189,7 +185,7 @@
 
     <!-- ============ 1 ============ -->
     <section data-stage="1" data-active="true" aria-labelledby="h-1" tabindex="-1">
-      <p class="stagelabel">Part 1 of 6</p>
+      <p class="stagelabel">Part 1 of 5</p>
       <h2 id="h-1">About this application</h2>
       <p class="lede">Try It asked you to examine your everyday leadership moves. Apply It asks you to make decisions in a situation where several forms of evidence compete, and where a familiar process may not be as neutral as it first appears.</p>
       <p>There is no score. The purpose is to notice what your decision treats as evidence, whose knowledge you count, and what tradeoffs your choice creates.</p>
@@ -205,13 +201,13 @@
       <p>Work through four leadership decisions. Choose the response closest to what you would actually do. After each choice you can read what all four responses treat as evidence, what each protects, and what each risks overlooking. There is no correct answer and nothing is scored.</p>
 
       <div class="note">
-        <p><strong>Nothing here is submitted.</strong> Your selections stay in this browser and are never sent anywhere or seen by a facilitator or your cohort. There is nothing to type — the reflection at the end is yours to think through or write in your own notes.</p>
+        <p><strong>Nothing here is submitted.</strong> Your selections stay in this browser and are never sent anywhere or seen by a facilitator or your cohort. There is nothing to type anywhere in this activity.</p>
       </div>
     </section>
 
     <!-- ============ 2. DECISION 1 ============ -->
     <section data-stage="2" aria-labelledby="h-2" tabindex="-1">
-      <p class="stagelabel">Part 2 of 6</p>
+      <p class="stagelabel">Part 2 of 5</p>
       <h2 id="h-2">Decision 1: What do you clarify first?</h2>
       <p>The team is assembled and the decision is on today's agenda.</p>
 
@@ -282,7 +278,7 @@
 
     <!-- ============ 3. DECISION 2 ============ -->
     <section data-stage="3" aria-labelledby="h-3" tabindex="-1">
-      <p class="stagelabel">Part 3 of 6</p>
+      <p class="stagelabel">Part 3 of 5</p>
       <h2 id="h-3">Decision 2: Whose evidence counts?</h2>
 
       <div class="scene">
@@ -356,7 +352,7 @@
 
     <!-- ============ 4. DECISION 3 ============ -->
     <section data-stage="4" aria-labelledby="h-4" tabindex="-1">
-      <p class="stagelabel">Part 4 of 6</p>
+      <p class="stagelabel">Part 4 of 5</p>
       <h2 id="h-4">Decision 3: The meeting dynamic</h2>
 
       <div class="scene">
@@ -432,7 +428,7 @@
 
     <!-- ============ 5. DECISION 4 ============ -->
     <section data-stage="5" aria-labelledby="h-5" tabindex="-1">
-      <p class="stagelabel">Part 5 of 6</p>
+      <p class="stagelabel">Part 5 of 5</p>
       <h2 id="h-5">Decision 4: The recommendation</h2>
       <p>The evidence remains mixed. The team must make a decision today.</p>
 
@@ -498,35 +494,18 @@
         <div class="focus">
           <div class="lq"><p class="k">Leadership question</p><p>How do you preserve rigor while refusing to confuse one narrow measure with the full picture of readiness?</p></div>
         </div>
-      </div>
-    </section>
 
-    <!-- ============ 6. REFLECTION ============ -->
-    <section data-stage="6" aria-labelledby="h-6" tabindex="-1">
-      <p class="stagelabel">Part 6 of 6</p>
-      <h2 id="h-6">Back to your own leadership</h2>
-
-      <div class="recap" id="recap">
-        <h4>Decision 1 — what you clarified first</h4>
-        <p id="r1" class="none">No response chosen.</p>
-        <h4>Decision 2 — whose evidence counted</h4>
-        <p id="r2" class="none">No response chosen.</p>
-        <h4>Decision 3 — the meeting dynamic</h4>
-        <p id="r3" class="none">No response chosen.</p>
-        <h4>Decision 4 — the recommendation</h4>
-        <p id="r4" class="none">No response chosen.</p>
-      </div>
-
-      <p>Finish these three, in your head or in your own notes. Nothing is typed here.</p>
-      <ul class="plain stems">
-        <li>The evidence I tend to trust most quickly is&hellip;</li>
-        <li>The perspective I need to seek earlier is&hellip;</li>
-        <li>One routine in my own context where &ldquo;consistency&rdquo; may hide unexamined judgment is&hellip;</li>
-      </ul>
-
-      <div class="lq">
-        <p class="k">Then ask</p>
-        <p>What would change if I judged the quality of this decision not only by whether the process was followed, but also by whose evidence and experience the process allowed me to see?</p>
+        <h3 style="margin:26px 0 0">Your four decisions</h3>
+        <div class="recap" id="recap">
+          <h4>Decision 1 — what you clarified first</h4>
+          <p id="r1" class="none">No response chosen.</p>
+          <h4>Decision 2 — whose evidence counted</h4>
+          <p id="r2" class="none">No response chosen.</p>
+          <h4>Decision 3 — the meeting dynamic</h4>
+          <p id="r3" class="none">No response chosen.</p>
+          <h4>Decision 4 — the recommendation</h4>
+          <p id="r4" class="none">No response chosen.</p>
+        </div>
       </div>
     </section>
 
@@ -534,7 +513,7 @@
       <button type="button" class="btn" id="back">Back</button>
       <button type="button" class="btn primary" id="next">Next</button>
       <span class="spacer"></span>
-      <span class="counter" id="counter" aria-live="polite">Part 1 of 6 — The situation</span>
+      <span class="counter" id="counter" aria-live="polite">Part 1 of 5 — The situation</span>
     </nav>
 
     <div class="tools">
@@ -548,11 +527,6 @@
     </div>
   </main>
 
-  <footer class="src">
-    <h3>Sources</h3>
-    <p>This fictional composite case applies the culturally responsive school leadership concepts developed throughout Module 3. It does not represent a specific student, school, family, or district.</p>
-  </footer>
-
 </div>
 
 <script>
@@ -560,7 +534,7 @@
   "use strict";
 
   var KEY = "cril-m3-apply-it-v1";
-  var STAGES = ["The situation","What do you clarify first?","Whose evidence counts?","The meeting dynamic","The recommendation","Back to your own leadership"];
+  var STAGES = ["The situation","What do you clarify first?","Whose evidence counts?","The meeting dynamic","The recommendation"];
   var TOTAL = STAGES.length;
   var current = 1;
 
