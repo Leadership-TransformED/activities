@@ -117,6 +117,7 @@
 
 
   body[data-view="steps"] section[data-stage]:not([data-active="true"]){display:none}
+  body[data-view="steps"]:not([data-last="true"]) .tools{display:none}
   body[data-view="steps"] .fb:not([data-others="open"]) .fbitem[data-chosen="false"]{display:none}
   body[data-view="linear"] .trail,body[data-view="linear"] .stepnav,body[data-view="linear"] .othersbtn{display:none}
   body[data-view="linear"] .fb{display:block!important}
@@ -517,8 +518,8 @@
     </nav>
 
     <div class="tools">
-      <h3>Your responses</h3>
-      <p>Your four selections are kept on this device, in this browser. Nothing is sent anywhere, and nothing you write is collected.</p>
+      <h3>Before you leave this page</h3>
+      <p>Your four selections are kept on this device, in this browser. There is nothing to type in this activity, and nothing is sent anywhere.</p>
       <div class="toolrow">
         <button type="button" class="btn quiet" id="print">Print this case</button>
         <button type="button" class="btn quiet" id="clear">Clear my responses</button>
@@ -665,6 +666,7 @@
     nextBtn.disabled = current === TOTAL;
     nextBtn.textContent = current === TOTAL - 1 ? "Last part" : "Next";
     counterEl.textContent = "Part " + current + " of " + TOTAL + " \u2014 " + STAGES[current-1];
+    document.body.setAttribute("data-last", current === TOTAL ? "true" : "false");
     if (current === TOTAL) updateRecap();
     if (moveFocus){
       var active = document.querySelector('section[data-active="true"]');
