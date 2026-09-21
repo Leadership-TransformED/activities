@@ -160,6 +160,7 @@
 
   /* ---------- modes ---------- */
   body[data-view="steps"] section[data-stage]:not([data-active="true"]){display:none}
+  body[data-view="steps"]:not([data-last="true"]) .tools{display:none}
   body[data-view="linear"] .trail,
   body[data-view="linear"] .stepnav{display:none}
   body[data-view="linear"] section[data-stage]{
@@ -368,16 +369,17 @@
       <span class="counter" id="counter" aria-live="polite">Part 1 of 5 — Start</span>
     </nav>
 
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
     <div class="tools">
-      <h3>Your responses</h3>
-      <p>Kept on this device, in this browser. Nothing is sent anywhere.</p>
+      <h3>Before you leave this page</h3>
+      <p>Your notes are kept on this device, in this browser. Nothing is sent anywhere.</p>
       <div class="toolrow">
         <button type="button" class="btn" id="save">Save my reflection</button>
         <button type="button" class="btn quiet" id="showtext">Show as text to copy</button>
         <button type="button" class="btn quiet" id="print">Print my map</button>
         <button type="button" class="btn quiet" id="clear">Clear my responses</button>
       </div>
-      <p class="status" id="status" role="status" aria-live="polite"></p>
       <div class="copybox" id="copybox" hidden>
         <label class="field" for="copyarea">Your Leadership Identity Map as plain text — select it all and copy</label>
         <textarea id="copyarea" readonly></textarea>
@@ -493,6 +495,7 @@
     nextBtn.disabled = current === TOTAL;
     nextBtn.textContent = current === TOTAL - 1 ? "Last part" : "Next";
     counterEl.textContent = "Part " + current + " of " + TOTAL + " — " + STAGES[current-1];
+    document.body.setAttribute("data-last", current === TOTAL ? "true" : "false");
     if (current === TOTAL) renderReview();
     if (moveFocus) {
       var active = document.querySelector('section[data-active="true"]');
